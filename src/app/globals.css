@@ -1,8 +1,49 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:is(.dark *));
+
+/* -------------------------------------------------------------------------- */
+/* 1. Base Variables & Typography                                             */
+/* -------------------------------------------------------------------------- */
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  @media (prefers-color-scheme: dark) {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+
+  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, Consolas, monospace;
+
+  font: 18px/145% var(--sans);
+  letter-spacing: 0.18px;
+  color-scheme: light dark;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Fonts */
+  --font-family-en: 'Inter', sans-serif;
+  --font-family-zh: 'Microsoft YaHei', 'PingFang SC', 'Hiragino Sans GB', 'Heiti SC', 'WenQuanYi Micro Hei', sans-serif;
+
+  /* Font Sizes */
+  --font-size-h1: 24px;
+  --font-size-h2: 18px;
+  --font-size-body: 14px;
+  --font-size-caption: 12px;
+
+  /* Font Weights */
+  --font-weight-bold: 700;
+  --font-weight-semibold: 600;
+  --font-weight-regular: 400;
+
+  @media (max-width: 1024px) {
+    font-size: 16px;
+  }
 }
 
 @theme inline {
@@ -12,15 +53,862 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 2. Custom Color Palette (Light Mode Default)                               */
+/* -------------------------------------------------------------------------- */
+:root {
+  /* Logo Colors */
+  --color-logo-cam: #1A1A1A;
+  --color-logo-pass: #9c7dd9;
+
+  /* Map background color */
+  --color-map-bg: #fef8e9;
+
+  /* Application Colors */
+  --color-primary: #281559;
+  --color-background: #F5F6FA;
+  --color-surface: #FFFFFF;
+  --color-surface-light: #f1efef;
+  --color-accent: #00C4CC;
+  --color-text-main: #1A1A1A;
+  --color-text-secondary: #888888;
+  --color-state-disabled: #E0E0E0;
+
+  /* Base theme variables (Legacy) */
+  --text: #6b6375;
+  --text-h: #08060d;
+  --bg: #fff;
+  --border: oklch(0.922 0 0);
+  --code-bg: #f4f3ec;
+  --accent-base: oklch(0.97 0 0);
+  --accent-bg: rgba(170, 59, 255, 0.1);
+  --accent-border: rgba(170, 59, 255, 0.5);
+  --social-bg: rgba(244, 243, 236, 0.5);
+  --shadow: rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+
+  color: var(--text);
+  background: var(--bg);
+
+  /* Spacing & Layout */
+  --spacing-2: 8px;
+  --spacing-3: 16px;
+  --spacing-4: 24px;
+  --spacing-5: 32px;
+
+  /* Radius */
+  --radius-card: 16px;
+  --radius-button: 8px;
+  --radius-pill: 100px;
+  /* Z-index layering variables */
+  --z-map-pin: 10000;
+  --z-modal: 20000;
+  --z-overlay: 30000;
+  
+  /* Shadows */
+  --shadow-card: 0px 4px 12px rgba(0, 0, 0, 0.05);
+  --glass-card-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+  --glass-card-shadow-hover: 0 14px 38px rgba(0, 0, 0, 0.56);
+  --glass-card-border: rgba(255, 255, 255, 0.1);
+  --glass-card-bg: color-mix(in srgb, var(--color-surface) 86%, transparent);
+
+  --mascot-card-image-bg: color-mix(in srgb, var(--color-surface) 56%, transparent);
+  --mascot-halo-core: rgba(56, 150, 255, 0.36);
+  --mascot-halo-mid: rgba(75, 180, 255, 0.18);
+  --mascot-halo-edge: rgba(95, 145, 255, 0.08);
+  --mascot-figure-shadow: rgba(0, 0, 0, 0.38);
+  --mascot-figure-shadow-muted: rgba(0, 0, 0, 0.2);
+  --mascot-fallback-text: color-mix(in srgb, var(--color-text-main) 78%, transparent);
+  --mascot-badge-bg: color-mix(in srgb, var(--color-primary) 88%, transparent);
+  --mascot-badge-new-bg: color-mix(in srgb, var(--color-accent) 88%, transparent);
+  --mascot-badge-locked-bg: rgba(0, 0, 0, 0.45);
+  --mascot-badge-text: #ffffff;
+  --mascot-badge-locked-text: rgba(255, 255, 255, 0.92);
+  --mascot-overlay-bottom: rgba(0, 0, 0, 0.24);
+  --mascot-location-text: color-mix(in srgb, var(--color-text-secondary) 90%, transparent);
+
+  /* Polaroid location token defaults (can be overridden by theme) */
+  --polaroid-location-bg: rgba(255, 255, 255, 0.05);
+  --polaroid-location-text: color-mix(in srgb, var(--color-text-main) 70%, transparent);
+  --polaroid-location-icon: color-mix(in srgb, var(--color-text-main) 58%, transparent);
+  --polaroid-body-text: color-mix(in srgb, var(--color-text-main) 78%, transparent);
+  --polaroid-image-bg: color-mix(in srgb, var(--color-surface-light) 82%, transparent);
+  --polaroid-avatar-bg: color-mix(in srgb, var(--color-text-main) 10%, var(--color-surface));
+  --polaroid-heart-color: #f87171;
+
+  /* Message wall editorial/glass tokens */
+  --wall-page-bg: var(--color-background);
+  --wall-kicker: var(--color-primary);
+  --wall-hero-copy: #5f6472;
+  --wall-hero-meta: #7f7a92;
+  --wall-control-surface: rgba(255, 255, 255, 0.88);
+  --wall-control-border: rgba(40, 21, 89, 0.09);
+  --wall-control-shadow: 0 10px 32px rgba(18, 26, 40, 0.05);
+  --wall-control-muted: #7d7d8c;
+  --wall-control-hover: rgba(26, 26, 26, 0.06);
+  --wall-divider: rgba(40, 21, 89, 0.12);
+  --wall-select-bg: #f8f9fc;
+  --wall-select-border: rgba(40, 21, 89, 0.08);
+  --wall-select-border-strong: rgba(40, 21, 89, 0.18);
+  --wall-select-shadow: 0 1px 0 rgba(255, 255, 255, 0.7) inset;
+  --wall-select-shadow-hover: 0 14px 28px rgba(30, 41, 59, 0.08);
+  --wall-select-icon-bg: rgba(40, 21, 89, 0.06);
+  --wall-select-icon-text: var(--color-primary);
+  --wall-select-kicker: #8a8598;
+  --wall-dropdown-bg: rgba(255, 255, 255, 0.92);
+  --wall-dropdown-border: rgba(40, 21, 89, 0.08);
+  --wall-dropdown-shadow: 0 24px 50px rgba(15, 23, 42, 0.12);
+  --wall-dropdown-text: #27213a;
+  --wall-dropdown-meta: #868092;
+  --wall-dropdown-hover: rgba(40, 21, 89, 0.04);
+  --wall-dropdown-icon-bg: rgba(40, 21, 89, 0.04);
+  --wall-dropdown-icon-border: rgba(40, 21, 89, 0.08);
+  --wall-dropdown-icon-text: #978fa9;
+  --wall-dropdown-active-bg: rgba(40, 21, 89, 0.94);
+  --wall-dropdown-active-text: #ffffff;
+  --wall-dropdown-active-meta: rgba(255, 255, 255, 0.72);
+  --wall-dropdown-active-icon-bg: rgba(255, 255, 255, 0.14);
+  --wall-dropdown-active-icon-text: #ffffff;
+  --wall-pill-text: #3b3250;
+  --wall-pill-active-bg: var(--color-primary);
+  --wall-pill-active-text: #ffffff;
+  --wall-cta-bg: var(--color-accent);
+  --wall-cta-text: #ffffff;
+  --wall-cta-shadow: 0 12px 28px rgba(0, 196, 204, 0.22);
+  --wall-fab-shadow: 0 12px 30px rgba(0, 0, 0, 0.16);
+  --wall-mobile-sticky-bg: rgba(245, 246, 250, 0.8);
+  --wall-mobile-sticky-border: rgba(40, 21, 89, 0.06);
+  --wall-mobile-search-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+  --wall-mobile-pill-bg: rgba(255, 255, 255, 0.78);
+
+  /* Collection editorial/capsule tokens */
+  --collection-hero-copy: color-mix(in srgb, var(--color-text-main) 68%, transparent);
+  --collection-capsule-bg: color-mix(in srgb, var(--color-surface) 86%, transparent);
+  --collection-capsule-border: color-mix(in srgb, var(--color-primary) 10%, transparent);
+  --collection-capsule-shadow: 0 14px 34px rgba(18, 26, 40, 0.06);
+  --collection-progress-kicker: color-mix(in srgb, var(--color-primary) 48%, var(--color-text-secondary));
+  --collection-progress-copy: color-mix(in srgb, var(--color-text-main) 62%, transparent);
+  --collection-progress-track: color-mix(in srgb, var(--color-primary) 10%, var(--color-surface-light));
+  --collection-progress-fill: var(--color-accent);
+  --collection-progress-ring-track: color-mix(in srgb, var(--color-primary) 12%, transparent);
+  --collection-progress-ring-fill: var(--color-primary);
+  --collection-progress-ring-center: color-mix(in srgb, var(--color-surface) 92%, transparent);
+  --collection-progress-ring-text: var(--color-text-main);
+  --collection-progress-ring-meta: color-mix(in srgb, var(--color-primary) 52%, var(--color-text-secondary));
+  --collection-progress-badge-bg: var(--color-primary);
+  --collection-progress-badge-text: #ffffff;
+  --collection-progress-badge-shadow: 0 10px 24px color-mix(in srgb, var(--color-primary) 18%, transparent);
+
+  --role-card-border: rgba(212, 212, 216, 0.7);
+  --role-card-border-active: rgba(40, 21, 89, 0.45);
+  --role-card-hover: rgba(40, 21, 89, 0.08);
+  --role-card-bg: rgba(255, 255, 255, 0.85);
+  --role-modal-bg: rgba(255, 255, 255, 0.97);
+
+  /* Profile editorial tokens */
+  --profile-hero-gradient-start: color-mix(in srgb, var(--color-primary) 26%, #ffffff);
+  --profile-hero-gradient-end: color-mix(in srgb, var(--color-accent) 28%, #ffffff);
+  --profile-hero-border: color-mix(in srgb, var(--color-primary) 14%, transparent);
+  --profile-avatar-ring-bg: color-mix(in srgb, var(--color-surface) 88%, transparent);
+  --profile-avatar-border: color-mix(in srgb, var(--color-primary) 22%, #ffffff);
+  --profile-avatar-shadow: 0 14px 34px rgba(21, 19, 44, 0.18);
+  --profile-edit-bg: color-mix(in srgb, var(--color-surface) 90%, transparent);
+  --profile-edit-border: color-mix(in srgb, var(--color-primary) 14%, transparent);
+  --profile-edit-icon: var(--color-text-main);
+  --profile-edit-hover: color-mix(in srgb, var(--color-primary) 10%, #ffffff);
+  --profile-role-bg: color-mix(in srgb, var(--color-accent) 20%, #ffffff);
+  --profile-role-border: color-mix(in srgb, var(--color-accent) 36%, #ffffff);
+  --profile-role-text: color-mix(in srgb, var(--color-text-main) 86%, transparent);
+  --profile-stat-divider: color-mix(in srgb, var(--color-text-main) 12%, transparent);
+  --profile-stat-icon-bg: color-mix(in srgb, var(--color-surface) 74%, transparent);
+  --profile-stat-icon-explore: var(--color-primary);
+  --profile-stat-icon-echoes: var(--color-accent);
+  --profile-stat-icon-likes: #e95f8c;
+  --profile-content-divider: color-mix(in srgb, var(--color-text-main) 10%, transparent);
+  --profile-empty-icon-bg: color-mix(in srgb, var(--color-surface) 74%, transparent);
+  --profile-empty-icon: color-mix(in srgb, var(--color-text-secondary) 70%, transparent);
+  --profile-memory-pad-x: 0.7rem;
+  --profile-memory-pad-y: 0.55rem;
+  --profile-utility-bg: color-mix(in srgb, var(--color-surface) 84%, transparent);
+  --profile-utility-border: color-mix(in srgb, var(--color-text-main) 12%, transparent);
+  --profile-utility-hover: color-mix(in srgb, var(--color-primary) 8%, transparent);
+  --profile-utility-icon-bg: color-mix(in srgb, var(--color-surface) 72%, transparent);
+  --profile-utility-icon: color-mix(in srgb, var(--color-text-secondary) 84%, transparent);
+  --profile-danger-icon-bg: color-mix(in srgb, #e95f8c 14%, transparent);
+  --profile-danger-icon: color-mix(in srgb, #e95f8c 84%, #000000);
+  --profile-danger-text: color-mix(in srgb, #e95f8c 80%, #000000);
+
+  /* Search / dropdown duel-theme tokens */
+  --wall-search-input-bg: rgba(255, 255, 255, 0.92);
+  --wall-search-input-border: rgba(40, 21, 89, 0.15);
+  --wall-search-input-text: var(--color-text-main);
+  --wall-search-placeholder: color-mix(in srgb, var(--color-text-main) 45%, transparent);
+  --wall-search-clear-hover: rgba(40, 21, 89, 0.08);
+  --wall-search-divider: rgba(40, 21, 89, 0.15);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. Global Elements & Styling                                               */
+/* -------------------------------------------------------------------------- */
+#root {
+  width: 100%;
+  text-align: center;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+body[data-wardrobe-credits-dialog-open='true'] [data-wardrobe-action-bar='true'] {
+  display: none;
+}
+
+h1, h2 {
+  font-family: var(--heading);
+  font-weight: 500;
+  color: var(--color-text-main);
+}
+
+h1 {
+  font-size: 56px;
+  letter-spacing: -1.68px;
+  margin: 32px 0;
+  @media (max-width: 1024px) {
+    font-size: 36px;
+    margin: 20px 0;
+  }
+}
+
+h2 {
+  font-size: 24px;
+  line-height: 118%;
+  letter-spacing: -0.24px;
+  margin: 0 0 8px;
+  @media (max-width: 1024px) {
+    font-size: 20px;
+  }
+}
+
+p {
+  margin: 0;
+}
+
+.studio-stage-shell {
+  min-height: clamp(24rem, 45svh, 42rem);
+}
+
+.studio-stage-badge {
+  transform: translate3d(0, 0, 0);
+}
+
+.studio-balance-figure {
+  animation: studio-balance-roll 360ms ease-out;
+}
+
+.studio-action-bar {
+  position: sticky;
+  bottom: var(--spacing-3);
+  z-index: var(--z-overlay);
+  border-radius: var(--radius-pill);
+  padding: var(--spacing-3);
+  margin: 0 var(--spacing-3);
+}
+
+@keyframes studio-balance-roll {
+  0% {
+    opacity: 0;
+    transform: translateY(-20%);
+  }
+
+  60% {
+    opacity: 1;
+    transform: translateY(8%);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+code, .counter {
+  font-family: var(--mono);
+  display: inline-flex;
+  border-radius: 4px;
+  color: var(--text-h);
+}
+
+code {
+  font-size: 15px;
+  line-height: 135%;
+  padding: 4px 8px;
+  background: var(--code-bg);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. Tailwind/Shadcn Theme Variables (Light)                                 */
+/* -------------------------------------------------------------------------- */
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 5. Dark Mode Styles & Overrides                                            */
+/* -------------------------------------------------------------------------- */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #9ca3af;
+    --text-h: #f3f4f6;
+    --bg: #16171d;
+    --border: #2e303a;
+    --code-bg: #1f2028;
+    --accent-base: #c084fc;
+    --accent-bg: rgba(192, 132, 252, 0.15);
+    --accent-border: rgba(192, 132, 252, 0.5);
+    --social-bg: rgba(47, 48, 58, 0.5);
+    --shadow: rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+  }
+  
+  #social .button-icon {
+    filter: invert(1) brightness(2);
+  }
+}
+
+.dark {
+  /* Logo Colors */
+  --color-logo-cam: #FFFFFF;
+  --color-logo-pass: #b091f0;
+
+  /* Custom Application Palette */
+  --color-primary: #9d7aeb;
+  --color-background: #121212;
+  --color-surface: #1e1e1e;
+  --color-surface-light: #2d2d2d;
+  --color-accent: #00e5ee;
+  --color-text-main: #f5f5f5;
+  --color-text-secondary: #a3a3a3;
+  --color-state-disabled: #333333;
+
+  --glass-card-bg: rgba(18, 18, 22, 0.72);
+  --glass-card-border: rgba(255, 255, 255, 0.1);
+  --glass-card-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  --glass-card-shadow-hover: 0 16px 44px rgba(0, 0, 0, 0.62);
+
+  --mascot-card-image-bg: rgba(255, 255, 255, 0.02);
+  --mascot-halo-core: rgba(58, 154, 255, 0.42);
+  --mascot-halo-mid: rgba(52, 130, 255, 0.22);
+  --mascot-halo-edge: rgba(78, 118, 255, 0.08);
+  --mascot-figure-shadow: rgba(0, 0, 0, 0.52);
+  --mascot-figure-shadow-muted: rgba(0, 0, 0, 0.35);
+  --mascot-fallback-text: rgba(245, 245, 245, 0.78);
+  --mascot-badge-bg: rgba(157, 122, 235, 0.9);
+  --mascot-badge-new-bg: rgba(0, 229, 238, 0.9);
+  --mascot-badge-locked-bg: rgba(0, 0, 0, 0.5);
+  --mascot-badge-text: #ffffff;
+  --mascot-badge-locked-text: rgba(255, 255, 255, 0.92);
+  --mascot-overlay-bottom: rgba(0, 0, 0, 0.36);
+  --mascot-location-text: rgba(255, 255, 255, 0.72);
+
+  --polaroid-location-bg: rgba(255, 255, 255, 0.06);
+  --polaroid-location-text: rgba(255, 255, 255, 0.72);
+  --polaroid-location-icon: rgba(255, 255, 255, 0.66);
+  --polaroid-body-text: rgba(255, 255, 255, 0.78);
+  --polaroid-image-bg: rgba(255, 255, 255, 0.03);
+  --polaroid-avatar-bg: rgba(255, 255, 255, 0.12);
+  --polaroid-heart-color: #fb7185;
+
+  /* Wall/search overrides */
+  --wall-hero-copy: rgba(245, 245, 245, 0.7);
+  --wall-hero-meta: rgba(245, 245, 245, 0.58);
+  --wall-control-surface: rgba(18, 18, 22, 0.72);
+  --wall-control-border: rgba(255, 255, 255, 0.12);
+  --wall-control-shadow: 0 18px 46px rgba(0, 0, 0, 0.55);
+  --wall-control-muted: rgba(245, 245, 245, 0.7);
+  --wall-control-hover: rgba(255, 255, 255, 0.08);
+  --wall-divider: rgba(255, 255, 255, 0.14);
+  --wall-pill-text: rgba(245, 245, 245, 0.86);
+
+  --wall-search-input-bg: rgba(25, 24, 32, 0.85);
+  --wall-search-input-border: rgba(255, 255, 255, 0.12);
+  --wall-search-input-text: #f5f5f5;
+  --wall-search-placeholder: color-mix(in srgb, #f5f5f5 65%, transparent);
+  --wall-search-clear-hover: rgba(255, 255, 255, 0.12);
+  --wall-search-divider: rgba(255, 255, 255, 0.2);
+
+  --wall-select-bg: rgba(255, 255, 255, 0.04);
+  --wall-select-border: rgba(255, 255, 255, 0.18);
+  --wall-select-border-strong: rgba(255, 255, 255, 0.28);
+  --wall-select-shadow: 0 1px 0 rgba(255, 255, 255, 0.1) inset;
+  --wall-select-shadow-hover: 0 14px 30px rgba(5, 5, 10, 0.35);
+  --wall-select-icon-bg: rgba(255, 255, 255, 0.05);
+  --wall-select-icon-text: var(--color-accent);
+  --wall-select-kicker: color-mix(in srgb, #f5f5f5 60%, transparent);
+  --wall-dropdown-bg: rgba(18, 18, 22, 0.9);
+  --wall-dropdown-border: rgba(255, 255, 255, 0.12);
+  --wall-dropdown-shadow: 0 24px 50px rgba(0, 0, 0, 0.9);
+  --wall-dropdown-text: #f5f5f5;
+  --wall-dropdown-meta: rgba(245, 245, 245, 0.75);
+  --wall-dropdown-hover: rgba(255, 255, 255, 0.06);
+  --wall-dropdown-icon-bg: rgba(255, 255, 255, 0.05);
+  --wall-dropdown-icon-border: rgba(255, 255, 255, 0.12);
+  --wall-dropdown-icon-text: rgba(255, 255, 255, 0.7);
+  --wall-dropdown-active-bg: rgba(255, 255, 255, 0.08);
+  --wall-dropdown-active-text: #ffffff;
+  --wall-dropdown-active-meta: rgba(255, 255, 255, 0.7);
+  --wall-dropdown-active-icon-bg: rgba(255, 255, 255, 0.16);
+  --wall-dropdown-active-icon-text: #ffffff;
+  --wall-cta-shadow: 0 14px 30px rgba(0, 229, 238, 0.18);
+  --wall-mobile-sticky-bg: rgba(18, 18, 22, 0.84);
+  --wall-mobile-sticky-border: rgba(255, 255, 255, 0.08);
+  --wall-mobile-search-shadow: 0 10px 28px rgba(0, 0, 0, 0.36);
+  --wall-mobile-pill-bg: rgba(255, 255, 255, 0.06);
+  --role-card-border: rgba(255, 255, 255, 0.15);
+  --role-card-border-active: rgba(255, 255, 255, 0.4);
+  --role-card-hover: rgba(255, 255, 255, 0.08);
+  --role-card-bg: rgba(18, 18, 22, 0.72);
+  --role-modal-bg: rgba(18, 18, 22, 0.92);
+
+  --profile-hero-gradient-start: rgba(88, 74, 128, 0.78);
+  --profile-hero-gradient-end: rgba(27, 118, 126, 0.78);
+  --profile-hero-border: rgba(255, 255, 255, 0.14);
+  --profile-avatar-ring-bg: rgba(18, 18, 22, 0.8);
+  --profile-avatar-border: rgba(255, 255, 255, 0.2);
+  --profile-avatar-shadow: 0 16px 36px rgba(0, 0, 0, 0.56);
+  --profile-edit-bg: rgba(30, 30, 35, 0.9);
+  --profile-edit-border: rgba(255, 255, 255, 0.18);
+  --profile-edit-icon: rgba(245, 245, 245, 0.88);
+  --profile-edit-hover: rgba(255, 255, 255, 0.12);
+  --profile-role-bg: rgba(0, 229, 238, 0.16);
+  --profile-role-border: rgba(0, 229, 238, 0.3);
+  --profile-role-text: rgba(225, 252, 254, 0.92);
+  --profile-stat-divider: rgba(255, 255, 255, 0.16);
+  --profile-stat-icon-bg: rgba(255, 255, 255, 0.06);
+  --profile-stat-icon-explore: rgba(191, 175, 246, 0.96);
+  --profile-stat-icon-echoes: rgba(0, 229, 238, 0.92);
+  --profile-stat-icon-likes: rgba(255, 131, 184, 0.96);
+  --profile-content-divider: rgba(255, 255, 255, 0.14);
+  --profile-empty-icon-bg: rgba(255, 255, 255, 0.04);
+  --profile-empty-icon: rgba(255, 255, 255, 0.48);
+  --profile-memory-pad-x: 0.7rem;
+  --profile-memory-pad-y: 0.55rem;
+  --profile-utility-bg: rgba(255, 255, 255, 0.03);
+  --profile-utility-border: rgba(255, 255, 255, 0.14);
+  --profile-utility-hover: rgba(255, 255, 255, 0.08);
+  --profile-utility-icon-bg: rgba(255, 255, 255, 0.05);
+  --profile-utility-icon: rgba(255, 255, 255, 0.72);
+  --profile-danger-icon-bg: rgba(255, 128, 165, 0.14);
+  --profile-danger-icon: rgba(255, 155, 188, 0.94);
+  --profile-danger-text: rgba(255, 155, 188, 0.95);
+
+  /* Polaroid location overrides for dark mode */
+  --polaroid-location-bg: rgba(255,255,255,0.04);
+  --polaroid-location-text: var(--color-text-main);
+
+  /* Shadcn Variables */
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+/* -------------------------------------------------------------------------- */
+/* 6. Tailwind Configuration Layers                                           */
+/* -------------------------------------------------------------------------- */
+@theme inline {
+  --font-heading: var(--font-sans);
+  --font-sans: 'Geist Variable', sans-serif;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+.campass-logo {
+  font-family: 'Baloo 2', var(--font-family-zh), var(--font-family-en), sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  user-select: none;
+}
+
+@keyframes sidebar-spring-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-18px) scale(0.98);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(2px) scale(1.01);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes sidebar-spring-in-right {
+  0% {
+    opacity: 0;
+    transform: translateX(18px) scale(0.98);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(-2px) scale(1.01);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Polaroid Card Component Styles                                              */
+/* Put visual styles used by PolaroidCard.tsx here so component stays CSS-only */
+/* -------------------------------------------------------------------------- */
+.polaroid-card {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.polaroid-wrapper {
+  break-inside: avoid;
+  margin-bottom: 1.5rem;
+  transition: transform 0.18s ease;
+}
+.polaroid-wrapper:hover { transform: scale(1.05); }
+
+.polaroid-card-inner {
+  background: var(--glass-card-bg);
+  padding: 12px 12px 24px 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--glass-card-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.polaroid-image {
+  width: 100%;
+  background: var(--polaroid-image-bg);
+  border-radius: 6px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  display: block;
+}
+
+/* Force LazyLoadImage wrappers to fill their containers properly */
+.lazy-load-image-background {
+  display: inline-block; /* revert to normal by default */
+}
+
+/* When the wrapper is used for full-width/height images like covers, force it to fill the block */
+.lazy-load-image-background:has(img[class*="w-full"][class*="h-full"]) {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.polaroid-image .lazy-load-image-background {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.polaroid-image img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  display: block;
+}
+
+/* Ensure all images with object-cover class render properly */
+img[class*="object-cover"] {
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* Ensure images in containers with overflow-hidden fill their space */
+[style*="overflow: hidden"] img,
+[class*="overflow-hidden"] img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Keep small avatar/inline images fixed size (don't let wrapper rules expand them) */
+.lazy-load-image-background img.w-4.h-4,
+img.w-4.h-4 {
+  width: 1rem !important;
+  height: 1rem !important;
+  max-width: none !important;
+  max-height: none !important;
+}
+.lazy-load-image-background img.w-8.h-8,
+img.w-8.h-8,
+.avatar {
+  width: 2rem !important;
+  height: 2rem !important;
+  max-width: none !important;
+  max-height: none !important;
+}
+.lazy-load-image-background img.w-12.h-12,
+img.w-12.h-12 {
+  width: 3rem !important;
+  height: 3rem !important;
+  max-width: none !important;
+  max-height: none !important;
+}
+
+.polaroid-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.polaroid-author-name {
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.polaroid-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+.polaroid-text {
+  color: var(--polaroid-body-text);
+  font-size: 1rem;
+  line-height: 1.625;
+  font-family: 'Caveat', 'Comic Sans MS', cursive, sans-serif;
+}
+
+.polaroid-author {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.polaroid-author .avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  background: var(--polaroid-avatar-bg);
+}
+
+.polaroid-location {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-family-en);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--polaroid-location-text);
+  background: var(--polaroid-location-bg);
+  border-radius: 9999px;
+  border: 1px solid var(--glass-card-border);
+  padding: 4px 10px;
+}
+
+.polaroid-map-pin {
+  width: 12px;
+  height: 12px;
+  color: var(--polaroid-location-icon);
+}
+
+.polaroid-time {
+  font-family: 'Caveat', 'Comic Sans MS', cursive, sans-serif;
+  font-size: 1.05rem;
+  color: var(--color-text-secondary);
+}
+
+.polaroid-like {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px;
+  border-radius: 8px;
+  transition: background-color 0.12s, color 0.12s;
+}
+.polaroid-like:hover { background: var(--color-background); }
+.polaroid-like .heart { color: var(--polaroid-heart-color); }
+
+.heart { width: 16px; height: 16px; }
+
+/* Generic location badge used across components (uses theme tokens) */
+.location-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--polaroid-location-text);
+  background: var(--polaroid-location-bg);
+  border-radius: 9999px;
+  padding: 4px 8px;
+  max-width: max-content;
+}
+
+.location-badge-pin {
+  width: 12px;
+  height: 12px;
+  color: var(--color-primary);
+}
+
+.wall-scrollbar-hidden {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.wall-scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
+
+.wall-mobile-sticky {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+.wall-mobile-sticky-inner {
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  background: var(--wall-mobile-sticky-bg);
+  border-bottom: 1px solid var(--wall-mobile-sticky-border);
+}
+
+/* Rotation variants (small set, picked by component) */
+@media (min-width: 768px) {
+  .polaroid-card.polaroid-rotate-0:hover .polaroid-card-inner { transform: rotate(-2deg); }
+  .polaroid-card.polaroid-rotate-1:hover .polaroid-card-inner { transform: rotate(-1deg); }
+  .polaroid-card.polaroid-rotate-2:hover .polaroid-card-inner { transform: rotate(1deg); }
+  .polaroid-card.polaroid-rotate-3:hover .polaroid-card-inner { transform: rotate(2deg); }
 }

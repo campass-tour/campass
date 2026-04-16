@@ -1,0 +1,26 @@
+.wall-compose-btn-advanced {
+  background: linear-gradient(90deg, var(--color-primary) 60%, var(--color-accent) 100%);
+  color: #fff;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 4px 24px 0 rgba(40,21,89,0.10), 0 1.5px 6px 0 rgba(0,0,0,0.08);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: box-shadow 0.2s, transform 0.18s, background 0.18s;
+  position: relative;
+  overflow: hidden;
+}
+.wall-compose-btn-advanced:hover, .wall-compose-btn-advanced:focus-visible {
+  box-shadow: 0 8px 32px 0 rgba(40,21,89,0.18), 0 2px 8px 0 rgba(0,196,204,0.10);
+  transform: translateY(-2px) scale(1.035);
+  background: linear-gradient(90deg, var(--color-primary) 40%, var(--color-accent) 100%);
+}
+.wall-compose-btn-advanced .btn-glow {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; top: 0; bottom: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  box-shadow: 0 0 24px 8px var(--color-accent);
+  opacity: 0.12;
+  z-index: 0;
+}
