@@ -20,7 +20,6 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "lucide-react": ["./src/shims/lucide-react"],
       "react-router-dom": ["./src/shims/react-router-dom"],
       "react-lazy-load-image-component": ["./src/shims/react-lazy-load-image-component"],
       "three": ["./src/shims/three"],
