@@ -1,3 +1,5 @@
+'use client';
+
 import { Sun, Moon, CircleUserRound } from 'lucide-react';
 
 interface MobileHeaderProps {

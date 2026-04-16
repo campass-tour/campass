@@ -1,9 +1,12 @@
+/* eslint-disable @next/next/no-img-element */
+'use client';
+
 import React, { useEffect, useState } from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { createPortal } from 'react-dom';
 import { MessageDetailModal } from '../common/MessageDetailModal';
 import { getMessagesByLocation } from '../../constants/messages';
-import type { Message } from '../../types';
+import type { Message } from '@/types';
 
 export interface DanmakuItem {
   id: string; // use message id

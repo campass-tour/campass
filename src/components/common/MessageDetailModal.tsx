@@ -1,3 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
+'use client';
+
 import React, { useEffect, useState } from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { createPortal } from 'react-dom';
@@ -31,6 +34,7 @@ interface MessageDetailModalProps {
 }
 
 export const MessageDetailModal: React.FC<MessageDetailModalProps> = ({ item, onClose, showDeleteIcon = false, onDelete }) => {
+  const isDev = process.env.NODE_ENV !== 'production';
   // 判断是否为移动端
   const isMobile = typeof navigator !== 'undefined' && /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
   // ImageViewer state
@@ -200,7 +204,7 @@ export const MessageDetailModal: React.FC<MessageDetailModalProps> = ({ item, on
             <div
               className="w-full h-48 rounded-[var(--radius-button)] overflow-hidden bg-gray-100 mt-2 shadow-sm cursor-pointer flex-shrink-0"
               onClick={() => {
-                if (import.meta.env.DEV) console.log('MessageDetailModal: open image viewer', item.rightImage);
+                if (isDev) console.log('MessageDetailModal: open image viewer', item.rightImage);
                 setViewerOpen(true);
               }}
             >

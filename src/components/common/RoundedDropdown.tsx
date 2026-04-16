@@ -1,3 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
+'use client';
+
 import React, { useEffect, useId, useRef, useState } from 'react';
 import { Check, ChevronDown } from 'lucide-react';
 import { cn } from '../../lib/utils';

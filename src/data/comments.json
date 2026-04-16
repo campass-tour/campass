@@ -1,0 +1,47 @@
+{
+  "msg_1": [
+    {
+      "id": "c-1",
+      "author": "Alice",
+      "text": "This is so cool!",
+      "timestamp": "2024-05-01T10:00:00Z"
+    },
+    {
+      "id": "c-2",
+      "author": "Bob",
+      "text": "I agree, amazing place.",
+      "timestamp": "2024-05-01T11:30:00Z"
+    }
+    
+  ],
+  "msg_2": [
+    {
+      "id": "c-3",
+      "author": "Charlie",
+      "text": "Love the vibe here.",
+      "timestamp": "2024-05-02T09:15:00Z"
+    }
+  ],
+  "msg_3": [
+    {
+      "id": "c-4",
+      "author": "Diana",
+      "text": "Amazing lab experience!",
+      "timestamp": "2024-05-03T08:20:00Z"
+    }
+  ],
+  "msg_5": [
+    {
+      "id": "c-5",
+      "author": "Eve",
+      "text": "The macchiato is perfection ☕",
+      "timestamp": "2024-05-04T14:45:00Z"
+    },
+    {
+      "id": "c-6",
+      "author": "Frank",
+      "text": "Going there tomorrow!",
+      "timestamp": "2024-05-04T15:30:00Z"
+    }
+  ]
+}

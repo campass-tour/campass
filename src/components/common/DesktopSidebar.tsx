@@ -1,3 +1,5 @@
+'use client';
+
 import { Sun, Moon, type LucideIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { cn } from '../../lib/utils';

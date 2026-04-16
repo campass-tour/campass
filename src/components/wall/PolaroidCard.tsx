@@ -1,6 +1,9 @@
+/* eslint-disable @next/next/no-img-element */
+'use client';
+
 import React from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-import type { Message } from '../../types';
+import type { Message } from '@/types';
 import { getLocationData } from '../../constants/locations';
 import { isCollectibleUnlocked } from '../../lib/storage';
 import { Heart, MapPin } from 'lucide-react';
@@ -16,7 +19,11 @@ const formatTimeAgo = (isoString: string) => {
   return `${Math.floor(diffInHours / 24)} days ago`;
 };
 
-const PolaroidCard: React.FC<{ message: Message; index: number; onClick: () => void }> = ({ message, index, onClick }) => {
+const PolaroidCard: React.FC<{ message: Message; index: number; onClick: () => void }> = ({
+  message,
+  index,
+  onClick,
+}) => {
   const rotationClass = `polaroid-rotate-${index % 4}`;
 
   const locationData = getLocationData(message.locationId);

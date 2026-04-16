@@ -1,3 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
+'use client';
+
 import React, { useEffect, useRef, useState } from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { createPortal } from 'react-dom';
@@ -10,6 +13,7 @@ interface ImageViewerProps {
 }
 
 export const ImageViewer: React.FC<ImageViewerProps> = ({ images, initialIndex = 0, isOpen, onClose }) => {
+  const isDev = process.env.NODE_ENV !== 'production';
   const [index, setIndex] = useState(initialIndex);
   const [scale, setScale] = useState(1);
   const [translate, setTranslate] = useState({ x: 0, y: 0 });
@@ -18,16 +22,35 @@ export const ImageViewer: React.FC<ImageViewerProps> = ({ images, initialIndex =
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (import.meta.env.DEV) console.log('ImageViewer: isOpen=', isOpen, 'initialIndex=', initialIndex, 'images length=', images?.length);
+    if (isDev) {
+      console.log(
+        'ImageViewer: isOpen=',
+        isOpen,
+        'initialIndex=',
+        initialIndex,
+        'images length=',
+        images?.length
+      );
+    }
     if (isOpen) {
-      try { document.body.style.overflow = 'hidden'; } catch (e) { if (import.meta.env.DEV) console.error('ImageViewer: failed to set body overflow', e); }
+      try {
+        document.body.style.overflow = 'hidden';
+      } catch (e) {
+        if (isDev) console.error('ImageViewer: failed to set body overflow', e);
+      }
     } else {
-      try { document.body.style.overflow = ''; } catch (e) { }
+      try {
+        document.body.style.overflow = '';
+      } catch (e) {}
       setScale(1);
       setTranslate({ x: 0, y: 0 });
     }
-    return () => { try { document.body.style.overflow = ''; } catch (e) { } };
-  }, [isOpen]);
+    return () => {
+      try {
+        document.body.style.overflow = '';
+      } catch (e) {}
+    };
+  }, [isOpen, images?.length, initialIndex, isDev]);
 
   useEffect(() => {
     setIndex(initialIndex);

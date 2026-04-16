@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useRef, useEffect } from 'react';
 import { SmartphoneNfc, X, MapPin } from 'lucide-react';
 import { LOCATIONS } from '../../constants/locations';
@@ -83,7 +85,9 @@ export function NfcSimulatorFab() {
 
   const simulateCheckIn = (id: string) => {
     setIsOpen(false);
-    window.location.href = `${import.meta.env.BASE_URL}?checkin=${id}`;
+    const url = new URL(window.location.href);
+    url.searchParams.set('checkin', id);
+    window.location.href = url.toString();
   };
 
   // Close menu if click outside when open

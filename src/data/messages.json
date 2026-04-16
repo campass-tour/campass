@@ -1,0 +1,287 @@
+[
+  {
+    "id": "msg_1",
+    "locationId": "cb",
+    "content": "The sunset from the central building today was absolutely breathtaking! 🌅",
+    "author": { "username": "SkyWatcher99", "avatarUrl": "https://i.pravatar.cc/150?u=a042581f4e29026704a" },
+    "likes": 24,
+    "timestamp": "2026-04-06T11:30:00.000Z",
+    "imageUrl": "https://wallpaperaccess.com/full/8975119.jpg"
+  },
+  {
+    "id": "msg_2",
+    "locationId": "cb",
+    "content": "Can someone tell me where room 302 is? I've been lost for 10 minutes...",
+    "author": { "username": "LostFreshman" },
+    "likes": 5,
+    "timestamp": "2026-04-06T10:00:00.000Z"
+  },
+  {
+    "id": "msg_3",
+    "locationId": "sb",
+    "content": "The new lab equipment in Science Building B is amazing! Finally we don't have to share microscopes.",
+    "author": { "username": "BioNerd", "avatarUrl": "https://i.pravatar.cc/150?u=a042581f4e29026704b" },
+    "likes": 42,
+    "timestamp": "2026-04-05T12:00:00.000Z"
+  },
+  {
+    "id": "msg_4",
+    "locationId": "mus",
+    "content": "Just saw the new dinosaur bone exhibit. It's so much bigger in person.",
+    "author": { "username": "DinoFan" },
+    "likes": 18,
+    "timestamp": "2026-04-06T11:15:00.000Z"
+  },
+  {
+    "id": "msg_5",
+    "locationId": "hui",
+    "content": "Best coffee on campus! Strongly recommend the iced caramel macchiato. ☕",
+    "author": { "username": "CoffeeAddict", "avatarUrl": "https://i.pravatar.cc/150?u=a042581f4e29026704c" },
+    "likes": 89,
+    "timestamp": "2026-04-06T09:00:00.000Z",
+    "imageUrl": "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&q=80&w=800"
+  },
+  {
+    "id": "msg_6",
+    "locationId": "cb",
+    "content": "Study group meeting at the 2nd floor lounge in 10 mins!",
+    "author": { "username": "silly bird", "avatarUrl": "https://p.sda1.dev/32/b4ea84ad54daf342c6979fafe2e2f544/profile.png" },
+    "authorId": 1,
+    "likes": 12,
+    "timestamp": "2026-04-06T11:45:00.000Z"
+  },
+  {
+    "id": "msg_7",
+    "locationId": "sb",
+    "content": "Found a quiet spot in Science Building B for reading. Highly recommend!",
+    "author": { "username": "Bookworm", "avatarUrl": "https://i.pravatar.cc/150?u=a042581f4e29026704d" },
+    "likes": 21,
+    "timestamp": "2026-04-06T10:30:00.000Z",
+    "imageUrl": "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&q=80&w=800"
+  },
+  {
+    "id": "msg_8",
+    "locationId": "mus",
+    "content": "The art gallery is a hidden gem. The lighting is perfect for photos!",
+    "author": { "username": "ArtLover", "avatarUrl": "https://i.pravatar.cc/150?u=a042581f4e29026704e" },
+    "likes": 33,
+    "timestamp": "2026-04-06T10:00:00.000Z",
+    "imageUrl": "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&q=80&w=800"
+  },
+  {
+    "id": "msg_9",
+    "locationId": "hui",
+    "content": "Live music at Hui Bar tonight! Who's coming?",
+    "author": { "username": "MusicFan" },
+    "likes": 47,
+    "timestamp": "2026-04-06T08:40:00.000Z"
+  },
+  {
+    "id": "msg_10",
+    "locationId": "cb",
+    "content": "Lost my water bottle near the entrance. Please DM if found!",
+    "author": { "username": "silly bird", "avatarUrl": "https://p.sda1.dev/32/b4ea84ad54daf342c6979fafe2e2f544/profile.png" },
+    "authorId": 1,
+    "likes": 2,
+    "timestamp": "2026-04-06T11:50:00.000Z"
+  },
+  {
+    "id": "msg_11",
+    "locationId": "sb",
+    "content": "The vending machine finally has my favorite snacks again!",
+    "author": { "username": "SnackSeeker" },
+    "likes": 15,
+    "timestamp": "2026-04-06T10:54:00.000Z"
+  },
+  {
+    "id": "msg_12",
+    "locationId": "mus",
+    "content": "Attended a great workshop on ancient pottery. Learned so much!",
+    "author": { "username": "HistoryBuff" },
+    "likes": 28,
+    "timestamp": "2026-04-06T09:00:00.000Z"
+  },
+  {
+    "id": "msg_13",
+    "locationId": "hui",
+    "content": "Try the cheesecake at Hui Bar, it's delicious!",
+    "author": { "username": "SweetTooth" },
+    "likes": 36,
+    "timestamp": "2026-04-06T07:54:00.000Z"
+  }
+  ,
+  {
+    "id": "msg_14",
+    "locationId": "cb",
+    "content": "There is a quiet study corner on the third floor near the east window.",
+    "author": { "username": "silly bird", "avatarUrl": "https://p.sda1.dev/32/b4ea84ad54daf342c6979fafe2e2f544/profile.png" },
+    "authorId": 1,
+    "likes": 8,
+    "timestamp": "2026-04-07T09:15:00.000Z"
+  },
+  {
+    "id": "msg_15",
+    "locationId": "sb",
+    "content": "Lab B reserves are now open for sign-up next Monday.",
+    "author": { "username": "LabCoordinator" },
+    "likes": 14,
+    "timestamp": "2026-04-07T08:30:00.000Z"
+  },
+  {
+    "id": "msg_16",
+    "locationId": "mus",
+    "content": "The gallery tour starts at 3pm, meet at the main entrance.",
+    "author": { "username": "TourGuide", "avatarUrl": "https://i.pravatar.cc/150?u=tourguide" },
+    "likes": 5,
+    "timestamp": "2026-04-07T07:00:00.000Z"
+  },
+  {
+    "id": "msg_17",
+    "locationId": "hui",
+    "content": "Happy hour coffee discount from 5pm to 6pm today.",
+    "author": { "username": "silly bird", "avatarUrl": "https://p.sda1.dev/32/b4ea84ad54daf342c6979fafe2e2f544/profile.png" },
+    "authorId": 1,
+    "likes": 20,
+    "timestamp": "2026-04-07T16:45:00.000Z"
+  },
+  {
+    "id": "msg_18",
+    "locationId": "fb",
+    "content": "Foundation Building always feels a little calmer in the early morning. Good place to settle down before class.",
+    "author": { "username": "quietcorner" },
+    "likes": 11,
+    "timestamp": "2026-04-08T08:10:00.000Z"
+  },
+  {
+    "id": "msg_19",
+    "locationId": "fb",
+    "content": "The light near the lobby was really nice today. Took a photo while waiting for my group meeting.",
+    "author": { "username": "campusframes", "avatarUrl": "https://i.pravatar.cc/150?u=campusframes" },
+    "likes": 19,
+    "timestamp": "2026-04-08T09:20:00.000Z",
+    "imageUrl": "https://picui.ogmua.cn/s1/2026/04/08/69d62aad59634.webp"
+  },
+  {
+    "id": "msg_20",
+    "locationId": "fb",
+    "content": "Reminder: the seminar room on the upper floor is quieter than I expected. Pretty good for last-minute review.",
+    "author": { "username": "week7survivor" },
+    "likes": 7,
+    "timestamp": "2026-04-07T16:45:00.000Z"
+  },
+  {
+    "id": "msg_21",
+    "locationId": "fb",
+    "content": "Passed by Foundation Building after the rain and the whole place looked unusually bright. Kind of a nice reset between classes.",
+    "author": { "username": "cloudbreak" },
+    "likes": 13,
+    "timestamp": "2026-04-07T11:10:00.000Z"
+  },
+  {
+    "id": "msg_22",
+    "locationId": "fb",
+    "content": "If you need somewhere to go over slides with your team, the tables near the entrance are usually free before noon.",
+    "author": { "username": "groupworkmode", "avatarUrl": "https://i.pravatar.cc/150?u=groupworkmode" },
+    "likes": 16,
+    "timestamp": "2026-04-08T09:10:00.000Z"
+  },
+  {
+    "id": "msg_23",
+    "locationId": "gym",
+    "content": "The gym was surprisingly quiet before 10 this morning. Best time for a quick workout before class.",
+    "author": { "username": "earlyset" },
+    "likes": 14,
+    "timestamp": "2026-04-09T07:50:00.000Z"
+  },
+  {
+    "id": "msg_24",
+    "locationId": "gym",
+    "content": "Tried the climbing wall for the first time today and my arms are absolutely gone, but it was worth it.",
+    "author": { "username": "holdplease" },
+    "likes": 29,
+    "timestamp": "2026-04-09T10:20:00.000Z",
+    "imageUrl": "https://free.boltp.com/2026/04/09/69d7b803d8147.webp"
+  },
+  {
+    "id": "msg_25",
+    "locationId": "gym",
+    "content": "The badminton courts filled up fast this afternoon. If you're planning doubles, come a little earlier.",
+    "author": { "username": "courtwatch" },
+    "likes": 17,
+    "timestamp": "2026-04-09T14:05:00.000Z"
+  },
+  {
+    "id": "msg_26",
+    "locationId": "gym",
+    "content": "There was a really nice stretch session happening outside the yoga room when I walked by. The whole floor felt calmer than usual.",
+    "author": { "username": "slowbreath", "avatarUrl": "https://i.pravatar.cc/150?u=slowbreath" },
+    "likes": 22,
+    "timestamp": "2026-04-09T11:10:00.000Z"
+  },
+  {
+    "id": "msg_27",
+    "locationId": "gym",
+    "content": "The table tennis room has become my favorite place to clear my head between deadlines. Fast games, no overthinking.",
+    "author": { "username": "spinserve" },
+    "likes": 18,
+    "timestamp": "2026-04-06T16:00:00.000Z"
+  },
+  {
+    "id": "msg_28",
+    "locationId": "gym",
+    "content": "The resistance bands neatly stacked in the fitness room today. The setup looked unusually organized.",
+    "author": { "username": "legdaylater" },
+    "likes": 9,
+    "timestamp": "2026-04-07T16:35:00.000Z"
+  },
+  {
+    "id": "msg_29",
+    "locationId": "gym",
+    "content": "Archery practice looked so focused this morning. The whole room went quiet every time someone drew the bow.",
+    "author": { "username": "targetline" },
+    "likes": 31,
+    "timestamp": "2026-04-05T18:10:00.000Z",
+    "imageUrl": "https://free.boltp.com/2026/04/09/69d7b7738f217.webp"
+  },
+  {
+    "id": "msg_30",
+    "locationId": "gym",
+    "content": "The basketball hall was packed after dinner, but the energy was great. Even from outside you could hear everyone calling for the ball.",
+    "author": { "username": "fullcourt" },
+    "likes": 26,
+    "timestamp": "2026-04-05T19:00:00.000Z"
+  },
+  {
+    "id": "msg_31",
+    "locationId": "gym",
+    "content": "Saw someone practicing short game drills at the golf area today. I didn't expect that corner to feel so serious and so quiet at the same time.",
+    "author": { "username": "greenside" },
+    "likes": 12,
+    "timestamp": "2026-04-07T19:20:00.000Z"
+  },
+  {
+    "id": "msg_32",
+    "locationId": "gym",
+    "content": "Dancing in the studio this afternoon was honestly so much fun. The whole room felt bright, energetic, and easy to get lost in.",
+    "author": { "username": "countsandeight", "avatarUrl": "https://i.pravatar.cc/150?u=countsandeight" },
+    "likes": 24,
+    "timestamp": "2026-04-05T20:05:00.000Z",
+    "imageUrl": "https://free.boltp.com/2026/04/09/69d7b6e1422c3.webp"
+  },
+  {
+    "id": "msg_33",
+    "locationId": "gym",
+    "content": "Tried squash for the first time and immediately understood why everyone says it looks easier than it is.",
+    "author": { "username": "wallreturn" },
+    "likes": 15,
+    "timestamp": "2026-04-07T20:40:00.000Z"
+  },
+  {
+    "id": "msg_34",
+    "locationId": "gym",
+    "content": "If you're looking for a quieter corner, the yoga and dance side of the building usually feels less crowded than the courts in the evening.",
+    "author": { "username": "afterclassmove" },
+    "likes": 11,
+    "timestamp": "2026-04-08T21:10:00.000Z"
+  }
+]

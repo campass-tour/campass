@@ -1,12 +1,15 @@
+/* eslint-disable react/no-unescaped-entities */
+'use client';
+
 import React, { useState } from 'react';
 import { MapPin, PenSquare, Plus } from 'lucide-react';
-import { MessageDetailModal } from '../components/common/MessageDetailModal';
-import { RoundedDropdown } from '../components/common/RoundedDropdown';
-import { ComposeMessageModal } from '../components/wall/ComposeMessageModal';
-import PolaroidCard from '../components/wall/PolaroidCard';
-import { WallSearchBar } from '../components/wall/WallSearchBar';
-import { WallDataProvider } from '../components/wall/WallDataProvider';
-import { cn } from '../lib/utils';
+import { MessageDetailModal } from '@/components/common/MessageDetailModal';
+import { RoundedDropdown } from '@/components/common/RoundedDropdown';
+import { ComposeMessageModal } from '@/components/wall/ComposeMessageModal';
+import PolaroidCard from '@/components/wall/PolaroidCard';
+import { WallSearchBar } from '@/components/wall/WallSearchBar';
+import { WallDataProvider } from '@/components/wall/WallDataProvider';
+import { cn } from '@/lib/utils';
 
 export const WallPage: React.FC = () => {
   const [isComposeOpen, setIsComposeOpen] = useState(false);

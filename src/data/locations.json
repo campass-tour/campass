@@ -1,0 +1,9 @@
+[
+  { "id": "cb", "name": "Central Building", "gps":{ "lat":31.27301452242067,"lon":120.73824892042543 }, "lv": 1 },
+  { "id": "sb", "name": "Science Building B", "x": 45.5, "y": 50, "lv": 1 },
+  { "id": "mus", "name": "Museum", "x": 60, "y": 65, "lv": 2 },
+  { "id": "hui", "name": "Hui Bar", "x": 20, "y": 70, "lv": 2 },
+  { "id": "gym", "name": "GYM", "x": 71.9, "y": 70.9, "lv": 2 },
+  { "id": "fb", "name": "Foundation Building", "gps":{ "lat":31.2746351556584,"lon":120.7381790098646 }, "lv": 1 }
+]
+

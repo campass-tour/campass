@@ -1,0 +1,33 @@
+[
+  {
+    "id": "cb",
+    "title": "The Heart of XJTLU",
+    "content": "The Central Building isn't just our administrative core; it's a living symbol of XJTLU's \"Student-Centered\" philosophy. With its flexible learning spaces and open-access library, this is where ideas are born, collaborations spark, and your academic adventure truly begins. Find a quiet corner by the window—inspiration is waiting."
+  },
+  {
+    "id": "sb",
+    "title": "Where Innovation Takes Shape",
+    "content": "Science Building B is home to cutting-edge laboratories and collaborative research spaces. The modern architecture reflects the forward-thinking minds of our students and researchers. It's not just a place to study; it's where you build the future."
+  },
+  {
+    "id": "mus",
+    "title": "Preserving History, Inspiring Tomorrow",
+    "content": "The Museum offers a glimpse into the rich history and cultural heritage of our campus. Every exhibit tells a story of perseverance and discovery. Take a moment to wander through the halls and connect with the legacy that shapes our present."
+  },
+  {
+    "id": "hui",
+    "title": "Connecting Minds, One Cup at a Time",
+    "content": "Hui Bar is the vibrant social hub where students gather to unwind, debate, and share ideas over a cup of coffee. It's more than a café—it's the heart of our student community where lifelong friendships are forged."
+  }
+  ,
+  {
+    "id": "fb",
+    "title": "New Journeys Take Root",
+    "content": "Foundation Building is where many students begin settling into the rhythm of campus life. With its classrooms, shared spaces, and steady flow of students, it carries the atmosphere of fresh starts, quiet effort, and small daily progress. More than just a place for lessons, it is where confidence grows and the first foundations of university life are built."
+  },
+  {
+    "id": "gym",
+    "title": "Energy Finds Its Rhythm",
+    "content": "The GYM is where students reset, recharge, and push themselves a little further every day. From quick workouts to team practice, it carries the pulse of movement, discipline, and shared momentum across campus. More than a training space, it is where effort becomes routine and energy turns into confidence."
+  }
+]

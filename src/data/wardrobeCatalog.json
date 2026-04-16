@@ -1,0 +1,57 @@
+{
+  "categories": [
+    {
+      "id": "all",
+      "label": "All",
+      "slot": "all",
+      "icon": "LayoutGrid"
+    },
+    {
+      "id": "head",
+      "label": "Head",
+      "slot": "head",
+      "icon": "Sparkles"
+    },
+    {
+      "id": "face",
+      "label": "Face",
+      "slot": "face",
+      "icon": "ScanFace"
+    },
+    {
+      "id": "gear",
+      "label": "Gear",
+      "slot": "gear",
+      "icon": "Package2"
+    }
+  ],
+  "items": [
+    {
+      "id": "sunglasses",
+      "name": "Sunglasses",
+      "category": "face",
+      "price": 0,
+      "icon": "clothes/sunglasses.png",
+      "description": "The current wearable prototype for the bird studio.",
+      "ownedByDefault": false,
+      "modelFile": "sunglasses.glb"
+
+    },
+    {
+      "id": "cap",
+      "name": "Cap",
+      "category": "head",
+      "price": 10,
+      "icon": "clothes/cap.png",
+      "description": "The current wearable prototype for the bird studio.",
+      "ownedByDefault": false,
+      "modelFile": "cap.glb",
+      "previewOffset": [
+        0,
+        -0.01,
+        0
+      ]
+
+    }
+  ]
+}

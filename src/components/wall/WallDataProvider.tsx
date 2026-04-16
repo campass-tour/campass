@@ -1,7 +1,8 @@
+'use client';
+
 import React, { useMemo, useState, useEffect, useCallback } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import { MESSAGES } from '../../constants/messages';
-import type { Message } from '../../types';
+import type { Message } from '@/types';
 import { LOCATIONS } from '../../constants/locations';
 import { isCollectibleUnlocked } from '../../lib/storage';
 import type { DanmakuItem } from './Danmaku';
@@ -25,27 +26,18 @@ interface WallDataProviderProps {
 }
 
 export const WallDataProvider: React.FC<WallDataProviderProps> = ({ children }) => {
-  const [searchParams] = useSearchParams();
-  const locationQuery = searchParams.get('location');
-  const qQuery = searchParams.get('q');
-
-  const [selectedLocationFilter, setSelectedLocationFilter] = useState<string | null>(
-    locationQuery || null
-  );
+  const [selectedLocationFilter, setSelectedLocationFilter] = useState<string | null>(null);
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
-  const [query, setQuery] = useState<string>(() => qQuery ?? '');
+  const [query, setQuery] = useState<string>('');
 
   useEffect(() => {
-    if (locationQuery && selectedLocationFilter !== locationQuery) {
-      setTimeout(() => setSelectedLocationFilter(locationQuery), 0);
-    }
-  }, [locationQuery, selectedLocationFilter]);
-
-  useEffect(() => {
-    if (qQuery !== null && qQuery !== query) {
-      setTimeout(() => setQuery(qQuery), 0);
-    }
-  }, [qQuery, query]);
+    // Read initial query params on client without requiring Next's useSearchParams()
+    const params = new URLSearchParams(window.location.search);
+    const loc = params.get('location');
+    const q = params.get('q');
+    if (loc) setSelectedLocationFilter(loc);
+    if (q) setQuery(q);
+  }, []);
 
   const unlockedLocations = useMemo(() => {
     return LOCATIONS.filter((loc) => isCollectibleUnlocked(loc.id));
