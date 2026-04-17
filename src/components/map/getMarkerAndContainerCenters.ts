@@ -1,16 +1,18 @@
-export function getMarkerAndContainerCenters(markerId: string, container: HTMLElement) {
+export function getMarkerAndContainerCenters(markerId: string, container: HTMLElement | null) {
   const marker = document.getElementById(markerId);
-  if (!marker) return null;
+  if (!marker || !container) return null;
 
   const markerRect = marker.getBoundingClientRect();
   const containerRect = container.getBoundingClientRect();
-
   const markerCenterX = markerRect.left + markerRect.width / 2;
   const markerCenterY = markerRect.top + markerRect.height / 2;
-
   const containerCenterX = containerRect.left + containerRect.width / 2;
   const containerCenterY = containerRect.top + containerRect.height / 2;
 
-  return { markerCenterX, markerCenterY, containerCenterX, containerCenterY };
+  return {
+    markerCenterX,
+    markerCenterY,
+    containerCenterX,
+    containerCenterY,
+  };
 }
-

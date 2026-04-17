@@ -5,6 +5,7 @@ export interface MessageAuthor {
 
 export interface Message {
   id: string;
+  authorId?: number;
   content: string;
   locationId: string;
   likes: number;
