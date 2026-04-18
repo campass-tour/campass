@@ -3,7 +3,7 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 
-import { MainLayout, type TabId } from '@/components/layout/MainLayout';
+import { MainLayout, type TabId } from '@/components/common/MainLayout';
 import { NfcSimulatorFab } from '@/components/common/NfcSimulatorFab';
 import CheckInSuccessModal from '@/components/collection/CheckInSuccessModal';
 import ARModelViewer from '@/components/photo/ARModelViewer';

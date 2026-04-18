@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo, useState, useEffect, useCallback } from 'react';
+import React, { useMemo, useState, useCallback, useSyncExternalStore } from 'react';
 import { MESSAGES } from '../../constants/messages';
 import type { Message } from '@/types';
 import { LOCATIONS } from '../../constants/locations';
@@ -13,7 +13,7 @@ export interface WallDataChildrenArgs {
   clearQuery: () => void;
   selectedLocationFilter: string | null;
   setSelectedLocationFilter: React.Dispatch<React.SetStateAction<string | null>>;
-  unlockedLocations: typeof LOCATIONS;
+  unlockedLocations: (typeof LOCATIONS)[number][];
   filteredMessages: Message[];
   locationFilteredMessages: Message[];
   selectedMessage: Message | null;
@@ -26,20 +26,21 @@ interface WallDataProviderProps {
 }
 
 export const WallDataProvider: React.FC<WallDataProviderProps> = ({ children }) => {
-  const [selectedLocationFilter, setSelectedLocationFilter] = useState<string | null>(null);
+  const [selectedLocationFilter, setSelectedLocationFilter] = useState<string | null>(() => {
+    if (typeof window === 'undefined') return null;
+    return new URLSearchParams(window.location.search).get('location');
+  });
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
-  const [query, setQuery] = useState<string>('');
-  const [isHydrated, setIsHydrated] = useState(false);
+  const [query, setQuery] = useState<string>(() => {
+    if (typeof window === 'undefined') return '';
+    return new URLSearchParams(window.location.search).get('q') ?? '';
+  });
 
-  useEffect(() => {
-    // Read initial query params on client without requiring Next's useSearchParams()
-    const params = new URLSearchParams(window.location.search);
-    const loc = params.get('location');
-    const q = params.get('q');
-    if (loc) setSelectedLocationFilter(loc);
-    if (q) setQuery(q);
-    setIsHydrated(true);
-  }, []);
+  const isHydrated = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
 
   const unlockedLocations = useMemo(() => {
     return LOCATIONS.filter((loc) => isCollectibleUnlocked(loc.id));
@@ -92,12 +93,12 @@ export const WallDataProvider: React.FC<WallDataProviderProps> = ({ children }) 
   return (
     <>
       {children({
-        query,
+        query: isHydrated ? query : '',
         setQuery,
         clearQuery,
         selectedLocationFilter: isHydrated ? selectedLocationFilter : null,
         setSelectedLocationFilter,
-        unlockedLocations,
+        unlockedLocations: isHydrated ? unlockedLocations : [],
         filteredMessages: isHydrated ? filteredMessages : MESSAGES,
         locationFilteredMessages: isHydrated ? locationFilteredMessages : MESSAGES,
         selectedMessage: isHydrated ? selectedMessage : null,

@@ -1,12 +1,11 @@
 'use client';
 
-import type { LucideIcon } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { cn } from '../../lib/utils';
-import type { TabId } from './MainLayout';
+import type { MainLayoutTab, TabId } from './MainLayout';
 
 interface MobileBottomNavProps {
-  tabs: { id: TabId; label: string; icon: LucideIcon }[];
+  tabs: MainLayoutTab[];
   activeTab: TabId;
 }
 
@@ -20,7 +19,7 @@ export function MobileBottomNav({ tabs, activeTab }: MobileBottomNavProps) {
         return (
           <Link
             key={tab.id}
-            to={`/${tab.id}`}
+            href={tab.href}
             className={cn(
               "flex items-center justify-center rounded-full cursor-pointer transition-all duration-300 ease-in-out focus:outline-none",
               isActive ? "px-5 py-2.5 mx-1" : "px-3 py-2.5 mx-1 bg-transparent"

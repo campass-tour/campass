@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Script from "next/script";
+import ModelViewerScriptLoader from "@/components/common/ModelViewerScriptLoader";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -30,12 +30,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         {children}
-        <Script
-          id="google-model-viewer"
-          src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"
-          type="module"
-          strategy="beforeInteractive"
-        />
+        <ModelViewerScriptLoader />
       </body>
     </html>
   );

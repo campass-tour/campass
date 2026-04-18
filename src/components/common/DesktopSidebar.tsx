@@ -1,13 +1,13 @@
 'use client';
 
-import { Sun, Moon, type LucideIcon } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Sun, Moon } from 'lucide-react';
+import Link from 'next/link';
 import { cn } from '../../lib/utils';
-import type { TabId } from './MainLayout';
+import type { MainLayoutTab, TabId } from './MainLayout';
 // import { SideDrawer } from './SideDrawer';
 
 interface DesktopSidebarProps {
-  tabs: { id: TabId; label: string; icon: LucideIcon }[];
+  tabs: MainLayoutTab[];
   activeTab: TabId;
   isDarkMode: boolean;
   toggleDarkMode: () => void;
@@ -38,7 +38,7 @@ export function DesktopSidebar({ tabs, activeTab, isDarkMode, toggleDarkMode }: 
           return (
             <Link
               key={tab.id}
-              to={`/${tab.id}`}
+              href={tab.href}
               className={cn(
                 "flex items-center space-x-4 w-full px-5 py-4 rounded-xl transition-all duration-200 font-semibold text-base",
                 isActive 

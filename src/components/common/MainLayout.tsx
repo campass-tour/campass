@@ -1,10 +1,18 @@
-import React, { useState, useEffect } from 'react';
+'use client';
+
+import React, { useState } from 'react';
 import { Map, Backpack, MessageSquare, User } from 'lucide-react';
 import { MobileHeader } from './MobileHeader';
 import { DesktopSidebar } from './DesktopSidebar';
 import { MobileBottomNav } from './MobileBottomNav';
 
 export type TabId = 'explore' | 'collection' | 'wall' | 'profile';
+export interface MainLayoutTab {
+  id: TabId;
+  label: string;
+  href: string;
+  icon: typeof Map;
+}
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -12,17 +20,15 @@ interface MainLayoutProps {
 }
 
 export function MainLayout({ children, activeTab }: MainLayoutProps) {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  useEffect(() => {
-    // Check initial user preference
-    if (document.documentElement.classList.contains('dark')) {
-      setIsDarkMode(true);
-    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      setIsDarkMode(true);
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    if (document.documentElement.classList.contains('dark')) return true;
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
       document.documentElement.classList.add('dark');
+      return true;
     }
-  }, []);
+    return false;
+  });
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
@@ -33,11 +39,11 @@ export function MainLayout({ children, activeTab }: MainLayoutProps) {
     }
   };
 
-  const tabs = [
-    { id: 'explore' as TabId, label: 'Explore', icon: Map },
-    { id: 'wall' as TabId, label: 'Wall', icon: MessageSquare },
-    { id: 'collection' as TabId, label: 'Collection', icon: Backpack },
-    { id: 'profile' as TabId, label: 'Profile', icon: User },
+  const tabs: MainLayoutTab[] = [
+    { id: 'explore', label: 'Explore', href: '/', icon: Map },
+    { id: 'wall', label: 'Wall', href: '/wall', icon: MessageSquare },
+    { id: 'collection', label: 'Collection', href: '/collection', icon: Backpack },
+    { id: 'profile', label: 'Profile', href: '/profile', icon: User },
   ];
 
   return (

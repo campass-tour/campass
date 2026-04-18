@@ -52,5 +52,23 @@
     "birdModel": "bird.glb",
     "mascotName": "GYM Mascot",
     "buildingOffset": [0, 0, 0]
+  },
+  {
+    "id": "hs",
+    "icon": null,
+    "image": null,
+    "model": "hs.glb",
+    "birdModel": "bird.glb",
+    "mascotName": "HS Mascot",
+    "buildingOffset": [0, 0, 0]
+  },
+  {
+    "id": "bs",
+    "icon": null,
+    "image": null,
+    "model": "bs.glb",
+    "birdModel": "bird.glb",
+    "mascotName": "BS Mascot",
+    "buildingOffset": [0, 0, 0]
   }
 ]
