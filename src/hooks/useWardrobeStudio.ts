@@ -40,8 +40,7 @@ export function useWardrobeStudio() {
   );
 
   const slotPriority: WardrobeSlot[] = ['head', 'face', 'gear'];
-  const storedEquippedBySlot = getWardrobeEquippedBySlot();
-  const previewEquippedBySlot: WardrobeEquippedBySlot = { ...storedEquippedBySlot };
+  const previewEquippedBySlot: WardrobeEquippedBySlot = { ...equippedBySlot };
   if (selectedItem) {
     previewEquippedBySlot[selectedItem.category] = selectedItem.id;
   }
