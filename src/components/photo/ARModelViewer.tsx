@@ -37,10 +37,6 @@ export default function ARModelViewer({
   checkinId,
   mascotName = 'Mascot',
 }: ARModelViewerProps) {
-  useEffect(() => {
-    import('@google/model-viewer');
-  }, []);
-
   const [isReady, setIsReady] = useState(false);
   const [isSupported, setIsSupported] = useState(true);
   const [isAssembling, setIsAssembling] = useState(false);

@@ -268,6 +268,13 @@ body {
   margin: 0;
 }
 
+model-viewer {
+  display: block;
+  width: 100%;
+  height: 100%;
+  --poster-color: transparent;
+}
+
 body[data-wardrobe-credits-dialog-open='true'] [data-wardrobe-action-bar='true'] {
   display: none;
 }

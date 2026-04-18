@@ -4,6 +4,21 @@ import { getAssembledWearablesModelBlob } from '../../lib/modelAssembly';
 
 const ModelViewer = 'model-viewer' as any;
 
+const normalizeModelViewerProps = (props?: Record<string, unknown>) => {
+  if (!props) return {};
+
+  const normalized: Record<string, unknown> = {};
+  Object.entries(props).forEach(([key, value]) => {
+    if (typeof value === 'boolean') {
+      normalized[key] = value ? 'true' : 'false';
+      return;
+    }
+    normalized[key] = value;
+  });
+
+  return normalized;
+};
+
 type WardrobeStudioModelViewerProps = {
   birdUrl: string;
   previewItems: WardrobeItem[];
@@ -19,21 +34,19 @@ export default function WardrobeStudioModelViewer({
   modelViewerProps,
   style,
 }: WardrobeStudioModelViewerProps) {
-  const [viewerReady, setViewerReady] = useState(false);
-
-  useEffect(() => {
-    let isMounted = true;
-    import('@google/model-viewer')
-      .then(() => {
-        if (isMounted) setViewerReady(true);
-      })
-      .catch(() => {
-        if (isMounted) setViewerReady(false);
-      });
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+  const normalizedModelViewerProps = useMemo(
+    () => normalizeModelViewerProps(modelViewerProps),
+    [modelViewerProps]
+  );
+  const mergedStyle = useMemo<React.CSSProperties>(
+    () => ({
+      display: 'block',
+      width: '100%',
+      height: '100%',
+      ...style,
+    }),
+    [style]
+  );
 
   const wearables = useMemo(
     () =>
@@ -102,15 +115,13 @@ export default function WardrobeStudioModelViewer({
 
   const src = wearables.length > 0 ? (assembledSrc || birdUrl) : birdUrl;
 
-  if (!viewerReady) return null;
-
   return (
     <ModelViewer
-      key={`wardrobe-mv-${resetViewKey}`}
+      key={`wardrobe-mv-${resetViewKey}-${src}`}
       src={src}
-      style={style}
+      style={mergedStyle}
       loading="lazy"
-      {...modelViewerProps}
+      {...normalizedModelViewerProps}
     />
   );
 }

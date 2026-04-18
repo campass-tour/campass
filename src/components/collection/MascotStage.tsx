@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import type { CSSProperties } from 'react';
 
 const FALLBACK_MODEL_URL = '/model/bird.glb';
@@ -30,28 +30,10 @@ export default function MascotStage({
   className,
   style,
 }: MascotStageProps) {
-  const [viewerReady, setViewerReady] = useState(false);
-
-  useEffect(() => {
-    let isMounted = true;
-    import('@google/model-viewer')
-      .then(() => {
-        if (isMounted) setViewerReady(true);
-      })
-      .catch(() => {
-        if (isMounted) setViewerReady(false);
-      });
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
   const buildingUrl = useMemo(
     () => resolveBuildingUrl(buildingId, buildingModelFile) || FALLBACK_MODEL_URL,
     [buildingId, buildingModelFile]
   );
-
-  if (!viewerReady) return null;
 
   return (
     <ModelViewer

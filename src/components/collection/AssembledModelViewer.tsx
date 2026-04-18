@@ -25,6 +25,21 @@ const resolveBirdUrl = (birdModelFile?: string | null) => {
   return birdUrl;
 };
 
+const normalizeModelViewerProps = (props?: Record<string, unknown>) => {
+  if (!props) return {};
+
+  const normalized: Record<string, unknown> = {};
+  Object.entries(props).forEach(([key, value]) => {
+    if (typeof value === 'boolean') {
+      normalized[key] = value ? 'true' : 'false';
+      return;
+    }
+    normalized[key] = value;
+  });
+
+  return normalized;
+};
+
 type AssembledModelViewerProps = {
   buildingId: string;
   buildingModelFile?: string | null;
@@ -58,21 +73,19 @@ export default function AssembledModelViewer({
   );
   const [assembledBlob, setAssembledBlob] = useState<Blob | null>(null);
   const [assembledSrc, setAssembledSrc] = useState<string | null>(null);
-  const [viewerReady, setViewerReady] = useState(false);
-
-  useEffect(() => {
-    let isMounted = true;
-    import('@google/model-viewer')
-      .then(() => {
-        if (isMounted) setViewerReady(true);
-      })
-      .catch(() => {
-        if (isMounted) setViewerReady(false);
-      });
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+  const normalizedModelViewerProps = useMemo(
+    () => normalizeModelViewerProps(modelViewerProps),
+    [modelViewerProps]
+  );
+  const mergedStyle = useMemo<React.CSSProperties>(
+    () => ({
+      display: 'block',
+      width: '100%',
+      height: '100%',
+      ...style,
+    }),
+    [style]
+  );
 
   useEffect(() => {
     let active = true;
@@ -138,16 +151,14 @@ export default function AssembledModelViewer({
 
   const finalSrc = assembledSrc || buildingUrl || FALLBACK_MODEL_URL;
 
-  if (!viewerReady) return null;
-
   return (
     <ModelViewer
       key={finalSrc}
       className={className}
-      style={style}
+      style={mergedStyle}
       src={finalSrc}
       loading="lazy"
-      {...modelViewerProps}
+      {...normalizedModelViewerProps}
     />
   );
 }
