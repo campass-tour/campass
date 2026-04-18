@@ -21,11 +21,7 @@
     "paths": {
       "@/*": ["./src/*"],
       "react-router-dom": ["./src/shims/react-router-dom"],
-      "react-lazy-load-image-component": ["./src/shims/react-lazy-load-image-component"],
-      "three": ["./src/shims/three"],
-      "three/examples/jsm/loaders/GLTFLoader.js": ["./src/shims/three-examples"],
-      "three/examples/jsm/loaders/DRACOLoader.js": ["./src/shims/three-examples"],
-      "three/examples/jsm/exporters/GLTFExporter.js": ["./src/shims/three-examples"]
+      "react-lazy-load-image-component": ["./src/shims/react-lazy-load-image-component"]
     }
   },
   "include": [

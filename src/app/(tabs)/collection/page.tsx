@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Sparkles } from 'lucide-react';
 import MascotCard from '@/components/collection/MascotCard';
@@ -19,11 +19,17 @@ const resolveImageUrl = (fileName?: string | null) => {
 };
 
 export default function CollectionPage() {
-  const unlockedData = getUnlockedCollectibles();
-  const unlockedCount = getUnlockedCount();
+  const [unlockedData, setUnlockedData] = useState<Record<string, boolean>>({});
+  const [unlockedCount, setUnlockedCount] = useState(0);
   const [selectedMascotId, setSelectedMascotId] = useState<string | null>(null);
   const [arTargetId, setArTargetId] = useState<string | null>(null);
   const [arTargetName, setArTargetName] = useState<string>('');
+
+  useEffect(() => {
+    // Load unlocked collectibles on client after hydration
+    setUnlockedData(getUnlockedCollectibles());
+    setUnlockedCount(getUnlockedCount());
+  }, []);
 
   const handleMascotClick = (id: string, isUnlocked: boolean) => {
     if (isUnlocked) {

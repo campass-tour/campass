@@ -54,19 +54,9 @@ export default function ARModelViewer({
   );
 
   const resolveBuildingUrl = (buildingId?: string, modelFile?: string | null) => {
-    if (buildingId) {
-      const direct = toModelUrl(`${buildingId}.glb`);
-      if (direct) return direct;
-    }
-
     if (modelFile) {
       const configured = toModelUrl(modelFile);
       if (configured) return configured;
-    }
-
-    if (buildingId) {
-      const legacy = toModelUrl(`${buildingId}-model.glb`);
-      if (legacy) return legacy;
     }
 
     return getDefaultModelUrl();

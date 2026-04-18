@@ -17,7 +17,7 @@ import { convertGpsToImageCoordinates } from '../../lib/mapConverter';
 import EdgeDirectionIndicator from './EdgeDirectionIndicator';
 import { ANCHOR_POINT_1, ANCHOR_POINT_2 } from '../../constants/mapConfig';
 // import { getMarkerAndContainerCenters } from './getMarkerAndContainerCenters';
-import { isCollectibleUnlocked } from '../../lib/storage';
+import { getUnlockedCollectibles } from '../../lib/storage';
 import { centerMarkerInContainer } from '../../lib/mapUtils';
 import type { TransformAnimationType } from '../../lib/mapUtils';
 import { SideDrawer } from '../common/SideDrawer';
@@ -46,6 +46,7 @@ export function MapViewer({ className, initialScale = 0.5 }: MapViewerProps) {
   const [showEdgeIndicator, setShowEdgeIndicator] = useState<boolean>(false);
   const [edgeBearing, setEdgeBearing] = useState<number>(0);
   const [edgeTargetName, setEdgeTargetName] = useState<string | null>(null);
+  const [unlockedMap, setUnlockedMap] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     const handleResize = () => {
@@ -53,6 +54,21 @@ export function MapViewer({ className, initialScale = 0.5 }: MapViewerProps) {
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    const syncUnlocked = () => {
+      setUnlockedMap(getUnlockedCollectibles());
+    };
+
+    syncUnlocked();
+    window.addEventListener('storage', syncUnlocked);
+    window.addEventListener('unlocked-collectibles-changed', syncUnlocked);
+
+    return () => {
+      window.removeEventListener('storage', syncUnlocked);
+      window.removeEventListener('unlocked-collectibles-changed', syncUnlocked);
+    };
   }, []);
 
   // Watch browser geolocation and convert to image % coordinates.
@@ -327,7 +343,7 @@ export function MapViewer({ className, initialScale = 0.5 }: MapViewerProps) {
                     if (selectedLevels === null) return true;
                     return selectedLevels.includes(loc.lv ?? 1);
                   }).map(location => {
-                    const isUnlocked = isCollectibleUnlocked(location.id);
+                    const isUnlocked = !!unlockedMap[location.id];
                     return (
                       <MapPin
                         key={location.id}

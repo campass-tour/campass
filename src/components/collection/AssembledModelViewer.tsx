@@ -16,7 +16,7 @@ const toPublicModelUrl = (fileName?: string | null) => {
 const resolveBuildingUrl = (buildingId: string, modelFile?: string | null) => {
   const configured = toPublicModelUrl(modelFile);
   if (configured) return configured;
-  return `/model/${buildingId}.glb`;
+  return FALLBACK_MODEL_URL;
 };
 
 const resolveBirdUrl = (birdModelFile?: string | null) => {
@@ -34,6 +34,7 @@ type AssembledModelViewerProps = {
   style?: React.CSSProperties;
   modelViewerProps?: Record<string, unknown>;
   enabled?: boolean;
+  includeWearables?: boolean;
 };
 
 export default function AssembledModelViewer({
@@ -45,6 +46,7 @@ export default function AssembledModelViewer({
   style,
   modelViewerProps,
   enabled = true,
+  includeWearables = true,
 }: AssembledModelViewerProps) {
   const buildingUrl = useMemo(
     () => resolveBuildingUrl(buildingId, buildingModelFile),
@@ -78,26 +80,28 @@ export default function AssembledModelViewer({
 
     if (!enabled) return () => { active = false; };
 
-    const equippedBySlot = getWardrobeEquippedBySlot();
-    const slotPriority = ['head', 'face', 'gear'] as const;
-    const wearables = slotPriority
-      .map((slot) => equippedBySlot[slot])
-      .map((itemId) => (itemId ? WARDROBE_ITEMS.find((item) => item.id === itemId) ?? null : null))
-      .filter((item) => item?.modelFile)
-      .map((item) => {
-        const modelFile = item?.modelFile ?? null;
-        const wearableUrl = modelFile
-          ? `/model/clothes/${modelFile}`
-          : null;
-        if (!wearableUrl || !item) return null;
-        return {
-          wearableUrl,
-          wearableOffset: item.previewOffset,
-          wearableRotation: item.previewRotation,
-          wearableScale: item.previewScale,
-        };
-      })
-      .filter((value): value is NonNullable<typeof value> => value !== null);
+    const wearables = includeWearables
+      ? (() => {
+          const equippedBySlot = getWardrobeEquippedBySlot();
+          const slotPriority = ['head', 'face', 'gear'] as const;
+          return slotPriority
+            .map((slot) => equippedBySlot[slot])
+            .map((itemId) => (itemId ? WARDROBE_ITEMS.find((item) => item.id === itemId) ?? null : null))
+            .filter((item) => item?.modelFile)
+            .map((item) => {
+              const modelFile = item?.modelFile ?? null;
+              const wearableUrl = modelFile ? `/model/clothes/${modelFile}` : null;
+              if (!wearableUrl || !item) return null;
+              return {
+                wearableUrl,
+                wearableOffset: item.previewOffset,
+                wearableRotation: item.previewRotation,
+                wearableScale: item.previewScale,
+              };
+            })
+            .filter((value): value is NonNullable<typeof value> => value !== null);
+        })()
+      : [];
 
     getAssembledModelBlob({
       birdUrl: resolvedBirdUrl,
@@ -116,7 +120,7 @@ export default function AssembledModelViewer({
     return () => {
       active = false;
     };
-  }, [buildingId, buildingUrl, buildingOffset, resolvedBirdUrl, enabled]);
+  }, [buildingId, buildingUrl, buildingOffset, resolvedBirdUrl, enabled, includeWearables]);
 
   useEffect(() => {
     if (!assembledBlob) {
@@ -138,6 +142,7 @@ export default function AssembledModelViewer({
 
   return (
     <ModelViewer
+      key={finalSrc}
       className={className}
       style={style}
       src={finalSrc}

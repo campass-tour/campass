@@ -4,7 +4,11 @@ import { useState, useRef, useEffect } from 'react';
 import { SmartphoneNfc, X, MapPin } from 'lucide-react';
 import { LOCATIONS } from '../../constants/locations';
 
-export function NfcSimulatorFab() {
+type NfcSimulatorFabProps = {
+  onCheckIn?: (id: string) => void;
+};
+
+export function NfcSimulatorFab({ onCheckIn }: NfcSimulatorFabProps) {
   const [position, setPosition] = useState({ x: 20, y: 80 }); // Top-Left by default to avoid bottom nav
   const [isDragging, setIsDragging] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -85,6 +89,12 @@ export function NfcSimulatorFab() {
 
   const simulateCheckIn = (id: string) => {
     setIsOpen(false);
+
+    if (onCheckIn) {
+      onCheckIn(id);
+      return;
+    }
+
     const url = new URL(window.location.href);
     url.searchParams.set('checkin', id);
     window.location.href = url.toString();

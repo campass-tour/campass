@@ -35,6 +35,7 @@ export function unlockCollectible(id: string): void {
   const unlocked = getUnlockedCollectibles();
   unlocked[id] = true;
   localStorage.setItem(STORAGE_KEY, JSON.stringify(unlocked));
+  window.dispatchEvent(new CustomEvent('unlocked-collectibles-changed'));
 }
 
 export function isCollectibleUnlocked(id: string): boolean {

@@ -134,6 +134,7 @@ export default function CheckInSuccessModal({
               birdModelFile={locData?.birdModel}
               buildingOffset={locData?.buildingOffset}
               enabled={enableModel}
+              includeWearables={false}
               modelViewerProps={{
                 'auto-rotate': 'true',
                 'camera-controls': 'true',

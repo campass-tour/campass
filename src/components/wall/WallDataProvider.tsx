@@ -29,6 +29,7 @@ export const WallDataProvider: React.FC<WallDataProviderProps> = ({ children }) 
   const [selectedLocationFilter, setSelectedLocationFilter] = useState<string | null>(null);
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
   const [query, setQuery] = useState<string>('');
+  const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
     // Read initial query params on client without requiring Next's useSearchParams()
@@ -37,6 +38,7 @@ export const WallDataProvider: React.FC<WallDataProviderProps> = ({ children }) 
     const q = params.get('q');
     if (loc) setSelectedLocationFilter(loc);
     if (q) setQuery(q);
+    setIsHydrated(true);
   }, []);
 
   const unlockedLocations = useMemo(() => {
@@ -93,14 +95,14 @@ export const WallDataProvider: React.FC<WallDataProviderProps> = ({ children }) 
         query,
         setQuery,
         clearQuery,
-        selectedLocationFilter,
+        selectedLocationFilter: isHydrated ? selectedLocationFilter : null,
         setSelectedLocationFilter,
         unlockedLocations,
-        filteredMessages,
-        locationFilteredMessages,
-        selectedMessage,
+        filteredMessages: isHydrated ? filteredMessages : MESSAGES,
+        locationFilteredMessages: isHydrated ? locationFilteredMessages : MESSAGES,
+        selectedMessage: isHydrated ? selectedMessage : null,
         setSelectedMessage,
-        selectedDanmakuItem,
+        selectedDanmakuItem: isHydrated ? selectedDanmakuItem : null,
       })}
     </>
   );
