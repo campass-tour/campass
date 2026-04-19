@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from "react";
 import { getAssembledModelBlob } from "@/lib/modelAssembly";
 
+const ModelViewer = "model-viewer" as any;
+
 export default function Test3DPage() {
   const [logs, setLogs] = useState<string[]>([]);
   const [assembledSrc, setAssembledSrc] = useState<string | null>(null);
@@ -87,16 +89,16 @@ export default function Test3DPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-[400px]">
         <div className="border border-white/10 rounded overflow-hidden relative">
            <span className="absolute top-2 left-2 text-[10px] bg-black/50 px-2">BIRD</span>
-           <model-viewer src="/model/bird.glb" camera-controls="true"></model-viewer>
+           <ModelViewer src="/model/bird.glb" camera-controls="true" />
         </div>
         <div className="border border-white/10 rounded overflow-hidden relative">
            <span className="absolute top-2 left-2 text-[10px] bg-black/50 px-2">CB</span>
-           <model-viewer src="/model/cb.glb" camera-controls="true"></model-viewer>
+           <ModelViewer src="/model/cb.glb" camera-controls="true" />
         </div>
         <div className="border border-white/10 rounded overflow-hidden relative bg-cyan-900/10">
            <span className="absolute top-2 left-2 text-[10px] bg-cyan-500/50 px-2">RESULT</span>
            {assembledSrc && (
-             <model-viewer src={assembledSrc} camera-controls="true" auto-rotate="true"></model-viewer>
+             <ModelViewer src={assembledSrc} camera-controls="true" auto-rotate="true" />
            )}
         </div>
       </div>
