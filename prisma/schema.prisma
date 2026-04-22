@@ -1,13 +1,111 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
+// prisma/schema.prisma
 
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+// -------------------------------------------------
+// 1. 用户表 (User)
+// -------------------------------------------------
+model User {
+  id        String   @id @default(uuid())
+  username  String
+  avatarUrl String?
+  balance   Int      @default(20) // 初始赠送 20 金币
+  createdAt DateTime @default(now())
+
+  // 关系 (一对多)
+  messages          Message[]
+  unlockedLocations UnlockedLocation[]
+  inventory         UserInventory[]
+
+  // 关系 (一对一)
+  equipped          UserEquipped?
+
+  transactions Transaction[]
+}
+
+// -------------------------------------------------
+// 2. 留言墙表 (Message)
+// -------------------------------------------------
+model Message {
+  id         String   @id @default(uuid())
+  locationId String   // 对应静态 JSON 里的 id，如 "cb", "sb"
+  content    String   // 留言文字
+  imageUrl   String?  // 可选的 AR 照片 URL
+  likes      Int      @default(0)
+  timestamp  DateTime @default(now()) // 对应 JSON 里的 timestamp
+
+  // 关联到作者
+  authorId   String
+  author     User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+}
+
+// -------------------------------------------------
+// 3. 地点解锁进度表 (UnlockedLocation)
+// 记录谁、在什么时候、解锁了哪个地点，以及解谜到了第几级
+// -------------------------------------------------
+model UnlockedLocation {
+  id         String   @id @default(uuid())
+  locationId String   // 对应 "cb", "sb" 等
+  level      Int      @default(1) // 1=模糊线索, 2=清晰线索, 3=终极坐标/完全解锁
+  unlockedAt DateTime @default(now())
+
+  // 关联到用户
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // 一个用户对一个地点只能有一条进度记录
+  @@unique([userId, locationId])
+}
+
+// -------------------------------------------------
+// 4. 用户背包/已购物品表 (UserInventory)
+// -------------------------------------------------
+model UserInventory {
+  id         String   @id @default(uuid())
+  itemId     String   // 对应静态 JSON 里商品 id，如 "sunglasses"
+  acquiredAt DateTime @default(now())
+
+  // 关联到用户
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // 一个用户只能拥有一个同样的物品
+  @@unique([userId, itemId])
+}
+
+// -------------------------------------------------
+// 5. 当前小鸟装扮表 (UserEquipped)
+// -------------------------------------------------
+model UserEquipped {
+  id      String  @id @default(uuid())
+
+  // 各个部位穿戴的 itemId (与你的 JSON categories slot 对应)
+  head    String? // 比如 "cap"
+  face    String? // 比如 "sunglasses"
+  gear    String?
+
+  // 关联到用户 (一对一关系)
+  userId  String  @unique
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// -------------------------------------------------
+// 6. 金币流水表 (Transaction)
+// 记录每一次金币的进出，而非仅仅记录余额
+// -------------------------------------------------
+model Transaction {
+  id          String   @id @default(uuid())
+  amount      Int      // 正数代表获得，负数代表扣除
+  reason      String   // 例如: "LOCATION_CHECKIN", "PURCHASE_ITEM", "DAILY_BONUS"
+  createdAt   DateTime @default(now())
+
+  // 关联到用户
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

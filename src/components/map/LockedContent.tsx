@@ -6,6 +6,7 @@ import cluesDataRaw from '../../data/clues.json';
 import ImageViewer from '../common/ImageViewer';
 import type { UserRole } from '../../lib/storage';
 import { getClueUnlockLevel, setClueUnlockLevel, getUserRole } from '../../lib/storage';
+import { triggerHaptic } from '../../lib/haptics';
 import { RoleSelectionModal } from '../common/RoleSelectionModal';
 
 const ALL_CLUES = cluesDataRaw as any[];
@@ -144,6 +145,7 @@ export const LockedContent: React.FC<LockedContentProps> = ({
     if (selectedOption === null || !activeQuiz) return;
     
     if (selectedOption === activeQuiz.quiz.correctAnswerIndex) {
+      triggerHaptic('quiz_correct');
       setQuizFeedback({ type: 'success', message: activeQuiz.quiz.successMessage });
       setTimeout(() => {
         const newLevel = activeQuiz.levelToUnlock;
@@ -156,6 +158,7 @@ export const LockedContent: React.FC<LockedContentProps> = ({
         setQuizFeedback(null);
       }, 2000);
     } else {
+      triggerHaptic('quiz_wrong');
       setQuizFeedback({ type: 'error', message: 'Incorrect. Try thinking differently and guessing again!' });
     }
   };

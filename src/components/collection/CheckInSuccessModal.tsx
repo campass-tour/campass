@@ -2,6 +2,7 @@
 import { Backpack, Map as MapIcon } from 'lucide-react';
 import LottieLib from 'lottie-react';
 import { getLocationData } from '../../constants/locations';
+import { triggerHaptic } from '../../lib/haptics';
 import { SummonARButton } from '../photo/SummonARButton';
 import AssembledModelViewer from './AssembledModelViewer';
 
@@ -42,6 +43,12 @@ export default function CheckInSuccessModal({
         })
         .then((data) => setLottieData(data))
         .catch((err) => console.log('Lottie load failed, fallback will be used', err));
+    }
+  }, [open]);
+
+  useEffect(() => {
+    if (open) {
+      triggerHaptic('card_unlock');
     }
   }, [open]);
 
