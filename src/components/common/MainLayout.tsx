@@ -17,9 +17,10 @@ export interface MainLayoutTab {
 interface MainLayoutProps {
   children: React.ReactNode;
   activeTab: TabId;
+  onLogoClick?: () => void;
 }
 
-export function MainLayout({ children, activeTab }: MainLayoutProps) {
+export function MainLayout({ children, activeTab, onLogoClick }: MainLayoutProps) {
   const [isDarkMode, setIsDarkMode] = useState(() => {
     if (typeof window === 'undefined') return false;
     if (document.documentElement.classList.contains('dark')) return true;
@@ -49,13 +50,18 @@ export function MainLayout({ children, activeTab }: MainLayoutProps) {
   return (
     <div className="flex md:flex-row flex-col h-screen w-full bg-[var(--color-background)] text-[var(--color-text-main)] font-sans">
       
-      <MobileHeader isDarkMode={isDarkMode} toggleDarkMode={toggleDarkMode} />
+      <MobileHeader
+        isDarkMode={isDarkMode}
+        toggleDarkMode={toggleDarkMode}
+        onLogoClick={onLogoClick}
+      />
 
       <DesktopSidebar
         tabs={tabs}
         activeTab={activeTab}
         isDarkMode={isDarkMode}
         toggleDarkMode={toggleDarkMode}
+        onLogoClick={onLogoClick}
       />
 
       {/* Main Content Area Wrapper */}

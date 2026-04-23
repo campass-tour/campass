@@ -1,6 +1,7 @@
 'use client';
 
 import { Sun, Moon } from 'lucide-react';
+import type { KeyboardEvent } from 'react';
 import Link from 'next/link';
 import { cn } from '../../lib/utils';
 import type { MainLayoutTab, TabId } from './MainLayout';
@@ -11,9 +12,17 @@ interface DesktopSidebarProps {
   activeTab: TabId;
   isDarkMode: boolean;
   toggleDarkMode: () => void;
+  onLogoClick?: () => void;
 }
 
-export function DesktopSidebar({ tabs, activeTab, isDarkMode, toggleDarkMode }: DesktopSidebarProps) {
+export function DesktopSidebar({ tabs, activeTab, isDarkMode, toggleDarkMode, onLogoClick }: DesktopSidebarProps) {
+  const handleLogoKeyDown = (e: KeyboardEvent<HTMLHeadingElement>) => {
+    if (!onLogoClick) return;
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    e.preventDefault();
+    onLogoClick();
+  };
+
   return (
     <aside className="hidden md:flex flex-col w-64 bg-(--color-surface) shadow-[2px_0_12px_rgba(0,0,0,0.03)] z-20 shrink-0 h-full border-r border-(--color-state-disabled) relative">
       <button 
@@ -24,7 +33,14 @@ export function DesktopSidebar({ tabs, activeTab, isDarkMode, toggleDarkMode }: 
         {isDarkMode ? <Sun size={24} /> : <Moon size={24} />}
       </button>
       <div className="p-8 pb-4 flex items-center justify-center">
-        <h1 className="campass-logo font-extrabold text-4xl tracking-tight flex select-none">
+        <h1
+          onClick={onLogoClick}
+          onKeyDown={handleLogoKeyDown}
+          tabIndex={0}
+          role="button"
+          className="campass-logo flex select-none text-4xl font-extrabold tracking-tight"
+          aria-label="Campass"
+        >
           <span className="text-(--color-logo-cam)">Cam</span>
           <span className="text-(--color-logo-pass)">pass</span>
         </h1>

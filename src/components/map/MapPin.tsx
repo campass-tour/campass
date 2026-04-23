@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
@@ -120,11 +120,11 @@ export const MapPin: React.FC<MapPinProps> = ({
     window.addEventListener('resize', updatePos);
     window.addEventListener('scroll', updatePos, true);
 
-    // 为了使弹窗跟随地图变换，我们监听地图容器的变化
-    // 创建一个自定义事件监听器
+    // 涓轰簡浣垮脊绐楄窡闅忓湴鍥惧彉鎹紝鎴戜滑鐩戝惉鍦板浘瀹瑰櫒鐨勫彉鍖?
+    // 鍒涘缓涓€涓嚜瀹氫箟浜嬩欢鐩戝惉鍣?
     const handleMapTransform = () => {
-      // 地图变换后，更新弹窗位置
-      setTimeout(updatePos, 0); // 使用timeout确保DOM已更新
+      // 鍦板浘鍙樻崲鍚庯紝鏇存柊寮圭獥浣嶇疆
+      setTimeout(updatePos, 0); // 浣跨敤timeout纭繚DOM宸叉洿鏂?
     };
 
     window.addEventListener('map-transform', handleMapTransform);
@@ -216,7 +216,7 @@ export const MapPin: React.FC<MapPinProps> = ({
       >
         {/* The Map Pin Indicator */}
         <div
-          id={`pin-${id}`}  // 添加ID属性以便在地图上定位
+          id={`pin-${id}`}  // 娣诲姞ID灞炴€т互渚垮湪鍦板浘涓婂畾浣?
           ref={pinRef}
           onClick={(e) => {
             e.stopPropagation();
@@ -312,15 +312,14 @@ export const MapPin: React.FC<MapPinProps> = ({
             className="w-full flex justify-center pt-[var(--spacing-2)] pb-[var(--spacing-2)] cursor-grab active:cursor-grabbing"
             style={{ touchAction: 'none' }}
             onTouchStart={(e) => {
-              if (e.touches.length > 1) return; // 只允许单指
+              if (e.touches.length > 1) return; // 鍙厑璁稿崟鎸?
               setIsDragging(true);
               startY.current = e.touches[0].clientY;
               startOffset.current = drawerOffset;
             }}
             onTouchMove={(e) => {
               if (!isDragging) return;
-              if (e.touches.length > 1) return; // 只允许单指
-              e.preventDefault(); // 阻止页面滚动
+              if (e.touches.length > 1) return; // 鍙厑璁稿崟鎸?
               const deltaY = e.touches[0].clientY - startY.current;
               const newOffset = Math.max(0, startOffset.current + deltaY);
               setDrawerOffset(newOffset);
@@ -362,3 +361,5 @@ export const MapPin: React.FC<MapPinProps> = ({
     </>
   );
 };
+
+

@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 'use client';
 
-import React from 'react';
+import React, { useSyncExternalStore } from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import type { Message } from '@/types';
 import { getLocationData } from '../../constants/locations';
@@ -24,11 +24,17 @@ const PolaroidCard: React.FC<{ message: Message; index: number; onClick: () => v
   index,
   onClick,
 }) => {
+  const isHydrated = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
   const rotationClass = `polaroid-rotate-${index % 4}`;
 
   const locationData = getLocationData(message.locationId);
-  const isUnlocked = isCollectibleUnlocked(message.locationId);
+  const isUnlocked = isHydrated && isCollectibleUnlocked(message.locationId);
   const locationName = isUnlocked && locationData ? locationData.locationName : 'Mysterious Location';
+  const timeLabel = isHydrated ? formatTimeAgo(message.timestamp) : '';
 
   return (
     <div className={`polaroid-wrapper ${rotationClass}`}>
@@ -59,7 +65,7 @@ const PolaroidCard: React.FC<{ message: Message; index: number; onClick: () => v
           </div>
 
           <div className="polaroid-meta">
-            <span className="polaroid-time">{formatTimeAgo(message.timestamp)}</span>
+            <span className="polaroid-time">{timeLabel}</span>
             <div
               className="polaroid-like"
               onClick={(e) => {

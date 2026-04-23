@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 
 import { MainLayout, type TabId } from '@/components/common/MainLayout';
@@ -19,6 +19,8 @@ function tabFromPathname(pathname: string): TabId {
 }
 
 export default function TabsLayout({ children }: { children: ReactNode }) {
+  const logoTapCountRef = useRef(0);
+  const logoTapTimerRef = useRef<number | null>(null);
   const pathname = usePathname() ?? '/';
   const router = useRouter();
   const activeTab = tabFromPathname(pathname);
@@ -30,9 +32,18 @@ export default function TabsLayout({ children }: { children: ReactNode }) {
   const [isCheckInModalOpen, setIsCheckInModalOpen] = useState(false);
   const [unlockedCount, setUnlockedCount] = useState(0);
   const [isARViewerOpen, setIsARViewerOpen] = useState(false);
+  const [isNfcSimulatorVisible, setIsNfcSimulatorVisible] = useState(false);
 
   useEffect(() => {
     setUnlockedCount(getUnlockedCount());
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (logoTapTimerRef.current) {
+        window.clearTimeout(logoTapTimerRef.current);
+      }
+    };
   }, []);
 
   const clearCheckinParam = () => {
@@ -78,11 +89,35 @@ export default function TabsLayout({ children }: { children: ReactNode }) {
     processCheckin(id);
   };
 
+  const handleLogoClick = () => {
+    if (logoTapTimerRef.current) {
+      window.clearTimeout(logoTapTimerRef.current);
+    }
+
+    logoTapCountRef.current += 1;
+
+    if (logoTapCountRef.current >= 5) {
+      logoTapCountRef.current = 0;
+      setIsNfcSimulatorVisible(true);
+      return;
+    }
+
+    logoTapTimerRef.current = window.setTimeout(() => {
+      logoTapCountRef.current = 0;
+      logoTapTimerRef.current = null;
+    }, 1500);
+  };
+
   return (
-    <MainLayout activeTab={activeTab}>
+    <MainLayout activeTab={activeTab} onLogoClick={handleLogoClick}>
       {children}
 
-      <NfcSimulatorFab onCheckIn={handleSimulateCheckIn} />
+      {isNfcSimulatorVisible ? (
+        <NfcSimulatorFab
+          onCheckIn={handleSimulateCheckIn}
+          onClose={() => setIsNfcSimulatorVisible(false)}
+        />
+      ) : null}
 
       <ARModelViewer
         open={isARViewerOpen}

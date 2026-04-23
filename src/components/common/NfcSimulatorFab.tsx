@@ -6,9 +6,10 @@ import { LOCATIONS } from '../../constants/locations';
 
 type NfcSimulatorFabProps = {
   onCheckIn?: (id: string) => void;
+  onClose?: () => void;
 };
 
-export function NfcSimulatorFab({ onCheckIn }: NfcSimulatorFabProps) {
+export function NfcSimulatorFab({ onCheckIn, onClose }: NfcSimulatorFabProps) {
   const [position, setPosition] = useState({ x: 20, y: 80 }); // Top-Left by default to avoid bottom nav
   const [isDragging, setIsDragging] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -75,7 +76,9 @@ export function NfcSimulatorFab({ onCheckIn }: NfcSimulatorFabProps) {
   };
 
   const onPointerUp = (e: React.PointerEvent) => {
-    e.currentTarget.releasePointerCapture(e.pointerId);
+    if (e.currentTarget.hasPointerCapture(e.pointerId)) {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    }
     setIsDragging(false);
     
     // Save new pos
@@ -123,6 +126,21 @@ export function NfcSimulatorFab({ onCheckIn }: NfcSimulatorFabProps) {
         touchAction: 'none' // Prevent pull-to-refresh while dragging on mobile
       }}
     >
+      {onClose ? (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsOpen(false);
+            onClose();
+          }}
+          className="absolute -right-2 -top-2 z-10 flex h-6 w-6 items-center justify-center rounded-full border border-[var(--color-state-disabled)] bg-[var(--color-surface)] text-[var(--color-text-secondary)] shadow-md transition hover:bg-[var(--color-background)] hover:text-[var(--color-text-main)]"
+          aria-label="Close NFC simulator"
+        >
+          <X className="h-3.5 w-3.5" />
+        </button>
+      ) : null}
+
       {/* Target Menu */}
       {isOpen && (
         <div className="absolute top-16 left-0 w-64 rounded-[var(--radius-card)] bg-[var(--color-surface)] p-3 shadow-2xl border border-[var(--color-state-disabled)] animate-in fade-in zoom-in-95 duration-200">
@@ -149,6 +167,7 @@ export function NfcSimulatorFab({ onCheckIn }: NfcSimulatorFabProps) {
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
+        onPointerCancel={onPointerUp}
         className={`group flex h-14 w-14 cursor-grab active:cursor-grabbing items-center justify-center rounded-full shadow-[var(--shadow-card)] transition-colors
           ${isOpen ? 'bg-[var(--color-background)] text-[var(--color-text-main)] border border-[var(--color-state-disabled)]' : 'bg-[var(--color-primary)] text-white hover:bg-purple-900'}
         `}
