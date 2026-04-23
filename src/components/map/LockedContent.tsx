@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import cluesDataRaw from '../../data/clues.json';
 import ImageViewer from '../common/ImageViewer';
@@ -9,7 +9,62 @@ import { getClueUnlockLevel, setClueUnlockLevel, getUserRole } from '../../lib/s
 import { triggerHaptic } from '../../lib/haptics';
 import { RoleSelectionModal } from '../common/RoleSelectionModal';
 
-const ALL_CLUES = cluesDataRaw as any[];
+type ImagePreloadStatus = 'loading' | 'loaded' | 'error';
+type ClueImageSource = string | string[] | null | undefined;
+type ClueLocation = {
+  locationId: string;
+  clues: {
+    card1: {
+      image_placeholder?: ClueImageSource;
+      lv1_text: string;
+      lv2_text: string;
+    };
+    card2: {
+      image_placeholder?: ClueImageSource;
+      lv3_text: string;
+    };
+  };
+  quizzes: Record<UserRole | 'freshman', Array<{
+    question: string;
+    options: string[];
+    correctAnswerIndex: number;
+    successMessage: string;
+  }>>;
+};
+type ActiveQuiz = {
+  levelToUnlock: number;
+  quiz: ClueLocation['quizzes'][UserRole][number];
+};
+type ImageErrorEvent = React.SyntheticEvent<HTMLImageElement, Event>;
+
+const ALL_CLUES = cluesDataRaw as ClueLocation[];
+
+const TARGET_IMAGE_FALLBACK =
+  'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450"%3E%3Crect width="800" height="450" fill="%23f3f4f6"/%3E%3Ctext x="400" y="225" text-anchor="middle" dominant-baseline="middle" fill="%236b7280" font-family="Arial" font-size="28"%3EClue image unavailable%3C/text%3E%3C/svg%3E';
+
+const resolveImageUrl = (path?: string | null) => {
+  if (!path) return null;
+  if (/^(https?:|data:)/.test(path)) return path;
+  const normalized = path.replace(/\\/g, '/').replace(/^\/+/, '');
+  if (normalized.startsWith('assets/clues/')) {
+    return `/${normalized.replace(/^assets\//, '')}`;
+  }
+  const fileName = normalized.replace(/^.*\//, '');
+  return `/clues/${fileName}`;
+};
+
+const getImageList = (raw?: ClueImageSource) => {
+  if (Array.isArray(raw)) return raw.filter(Boolean);
+  return raw ? [raw] : [];
+};
+
+const getFirstImage = (raw?: ClueImageSource) => getImageList(raw)[0];
+
+const getCard3ImageUrls = (locationData?: ClueLocation) => {
+  return getImageList(locationData?.clues?.card2?.image_placeholder)
+    .map((path) => resolveImageUrl(path) || path)
+    .filter(Boolean) as string[];
+};
 
 interface LockedContentProps {
   id?: string;
@@ -45,19 +100,9 @@ export const LockedContent: React.FC<LockedContentProps> = ({
   hintText,
   hideTitle = false
 }) => {
-  const resolveImageUrl = (path?: string | null) => {
-    if (!path) return null;
-    if (/^(https?:|data:)/.test(path)) return path;
-    const normalized = path.replace(/\\/g, '/').replace(/^\/+/, '');
-    if (normalized.startsWith('assets/clues/')) {
-      return `/${normalized.replace(/^assets\//, '')}`;
-    }
-    const fileName = normalized.replace(/^.*\//, '');
-    return `/clues/${fileName}`;
-  };
   const [unlockedLevel, setUnlockedLevel] = useState(() => id ? getClueUnlockLevel(id) : 1);
   const [expandedPanel, setExpandedPanel] = useState(() => id ? getClueUnlockLevel(id) : 1);
-  const [activeQuiz, setActiveQuiz] = useState<any>(null);
+  const [activeQuiz, setActiveQuiz] = useState<ActiveQuiz | null>(null);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [quizFeedback, setQuizFeedback] = useState<{ type: 'success' | 'error', message: string } | null>(null);
   const [roleModalOpen, setRoleModalOpen] = useState(false);
@@ -66,9 +111,38 @@ export const LockedContent: React.FC<LockedContentProps> = ({
   const [viewerOpen, setViewerOpen] = useState(false);
   const [viewerIndex, setViewerIndex] = useState(0);
   const [viewerImages, setViewerImages] = useState<string[]>([]);
+  const [card3ImageStatus, setCard3ImageStatus] = useState<Record<string, ImagePreloadStatus>>({});
   const touchStartXRef = useRef<number | null>(null);
+  const preloadingCard3UrlsRef = useRef<Set<string>>(new Set());
 
   const locationData = ALL_CLUES.find(c => c.locationId === id);
+
+  const preloadCard3Images = useCallback((data = locationData) => {
+    const urls = getCard3ImageUrls(data);
+    urls.forEach((url) => {
+      if (preloadingCard3UrlsRef.current.has(url)) return;
+      preloadingCard3UrlsRef.current.add(url);
+      setCard3ImageStatus((previous) => {
+        if (previous[url] === 'loaded' || previous[url] === 'loading') return previous;
+        return { ...previous, [url]: 'loading' };
+      });
+
+      const image = new window.Image();
+      image.onload = () => {
+        setCard3ImageStatus((previous) => ({ ...previous, [url]: 'loaded' }));
+      };
+      image.onerror = () => {
+        preloadingCard3UrlsRef.current.delete(url);
+        setCard3ImageStatus((previous) => ({ ...previous, [url]: 'error' }));
+      };
+      image.src = url;
+    });
+  }, [locationData]);
+
+  useEffect(() => {
+    if (!locationData || unlockedLevel < 2) return;
+    preloadCard3Images(locationData);
+  }, [locationData, preloadCard3Images, unlockedLevel]);
 
   if (!locationData) {
     return (
@@ -90,7 +164,7 @@ export const LockedContent: React.FC<LockedContentProps> = ({
               <LazyLoadImage
                 src={resolveImageUrl(hintImage) || undefined}
                 alt="Location Clue"
-                onError={(e: any) => { e.currentTarget.src = resolveImageUrl(hintImage) || 'https://via.placeholder.com/400x300?text=Clue+Placeholder'; }}
+                onError={(e: ImageErrorEvent) => { e.currentTarget.src = resolveImageUrl(hintImage) || 'https://via.placeholder.com/400x300?text=Clue+Placeholder'; }}
                 className="w-full h-full object-cover blur-[6px] scale-110"
                 effect="blur"
               />
@@ -147,6 +221,9 @@ export const LockedContent: React.FC<LockedContentProps> = ({
     if (selectedOption === activeQuiz.quiz.correctAnswerIndex) {
       triggerHaptic('quiz_correct');
       setQuizFeedback({ type: 'success', message: activeQuiz.quiz.successMessage });
+      if (activeQuiz.levelToUnlock === 2) {
+        preloadCard3Images();
+      }
       setTimeout(() => {
         const newLevel = activeQuiz.levelToUnlock;
         setUnlockedLevel(newLevel);
@@ -218,8 +295,8 @@ export const LockedContent: React.FC<LockedContentProps> = ({
             <div className="relative w-full aspect-video rounded-md overflow-hidden bg-gray-200 mb-3 shadow-inner">
               <div className="w-full h-full cursor-default select-none">
                 <LazyLoadImage
-                  src={resolveImageUrl(hintImage ?? clues.card1.image_placeholder) || 'https://via.placeholder.com/400x300?text=Clue+Placeholder'}
-                  onError={(e: any) => { e.currentTarget.src = resolveImageUrl(hintImage ?? clues.card1.image_placeholder) || 'https://via.placeholder.com/400x300?text=Clue+Placeholder'; }}
+                  src={resolveImageUrl(hintImage ?? getFirstImage(clues.card1.image_placeholder)) || 'https://via.placeholder.com/400x300?text=Clue+Placeholder'}
+                  onError={(e: ImageErrorEvent) => { e.currentTarget.src = resolveImageUrl(hintImage ?? getFirstImage(clues.card1.image_placeholder)) || 'https://via.placeholder.com/400x300?text=Clue+Placeholder'; }}
                   alt="Ambience Clue"
                   className={`w-full h-full object-cover transition-all duration-500 blur-[8px] scale-110 opacity-70`}
                   effect="blur"
@@ -227,7 +304,7 @@ export const LockedContent: React.FC<LockedContentProps> = ({
               </div>
               <div className="absolute inset-0 pointer-events-none bg-white/10 backdrop-blur-sm" />
             </div>
-            <p className="mb-4 italic">"{clues.card1.lv1_text}"</p>
+            <p className="mb-4 italic">&quot;{clues.card1.lv1_text}&quot;</p>
             
             {unlockedLevel < 2 ? (
               <button 
@@ -260,8 +337,8 @@ export const LockedContent: React.FC<LockedContentProps> = ({
                 if (urls.length) { setViewerImages(urls); setViewerIndex(0); setViewerOpen(true); }
               }}>
                 <LazyLoadImage
-                  src={resolveImageUrl(hintImage ?? clues.card1.image_placeholder) || 'https://via.placeholder.com/400x200?text=Zone+Placeholder'}
-                  onError={(e: any) => { e.currentTarget.src = resolveImageUrl(hintImage ?? clues.card1.image_placeholder) || 'https://via.placeholder.com/400x200?text=Zone+Placeholder'; }}
+                  src={resolveImageUrl(hintImage ?? getFirstImage(clues.card1.image_placeholder)) || 'https://via.placeholder.com/400x200?text=Zone+Placeholder'}
+                  onError={(e: ImageErrorEvent) => { e.currentTarget.src = resolveImageUrl(hintImage ?? getFirstImage(clues.card1.image_placeholder)) || 'https://via.placeholder.com/400x200?text=Zone+Placeholder'; }}
                   alt="Zone Clue"
                   className={`w-full h-full object-cover transition-all duration-500 scale-105 opacity-90`}
                   effect="blur"
@@ -299,33 +376,57 @@ export const LockedContent: React.FC<LockedContentProps> = ({
               {(() => {
                 const raw = clues.card2.image_placeholder;
                 const imgs = Array.isArray(raw) ? raw : (raw ? [raw] : []);
-                const current = imgs.length ? imgs[card3Index % imgs.length] : null;
+                const urls = imgs.map((p: string) => resolveImageUrl(p) || p).filter(Boolean) as string[];
+                const safeIndex = imgs.length ? card3Index % imgs.length : 0;
+                const current = imgs.length ? imgs[safeIndex] : null;
+                const currentUrl = urls[safeIndex];
+                const currentStatus = currentUrl ? card3ImageStatus[currentUrl] : undefined;
+                const isCurrentImageLoading = Boolean(currentUrl && currentStatus !== 'loaded' && currentStatus !== 'error');
+                const imageSrc = currentStatus === 'error'
+                  ? TARGET_IMAGE_FALLBACK
+                  : (resolveImageUrl(current) || TARGET_IMAGE_FALLBACK);
+                const goToImage = (nextIndex: number) => {
+                  if (isCurrentImageLoading || !imgs.length) return;
+                  setCard3Index((nextIndex + imgs.length) % imgs.length);
+                };
                 return (
                   <div
                     className="w-full h-full relative"
                     onTouchStart={(e) => { touchStartXRef.current = e.touches?.[0]?.clientX ?? null; }}
                     onTouchEnd={(e) => {
+                      if (isCurrentImageLoading) {
+                        touchStartXRef.current = null;
+                        return;
+                      }
                       const endX = e.changedTouches?.[0]?.clientX ?? null;
                       if (touchStartXRef.current !== null && endX !== null) {
                         const delta = endX - touchStartXRef.current;
                         if (Math.abs(delta) > 40) {
-                          if (delta < 0) setCard3Index((s) => (imgs.length ? (s + 1) % imgs.length : s));
-                          else setCard3Index((s) => (imgs.length ? (s - 1 + imgs.length) % imgs.length : s));
+                          if (delta < 0) goToImage(safeIndex + 1);
+                          else goToImage(safeIndex - 1);
                         }
                       }
                       touchStartXRef.current = null;
                     }}
                   >
                     {current ? (
-                      <button className="w-full h-full" onClick={() => {
-                        const urls = imgs.map((p: string) => resolveImageUrl(p) || p).filter(Boolean) as string[];
+                      <button className="w-full h-full disabled:cursor-wait" disabled={isCurrentImageLoading} onClick={() => {
                         if (urls.length) { setViewerImages(urls); setViewerIndex(card3Index); setViewerOpen(true); }
                       }}>
                         <LazyLoadImage
-                          src={resolveImageUrl(current) || 'https://via.placeholder.com/400x300?text=Target+Located'}
-                          onError={(e: any) => { e.currentTarget.src = resolveImageUrl(current) || 'https://via.placeholder.com/400x300?text=Target+Located'; }}
+                          src={imageSrc}
+                          onLoad={() => {
+                            if (!currentUrl) return;
+                            setCard3ImageStatus((previous) => ({ ...previous, [currentUrl]: 'loaded' }));
+                          }}
+                          onError={(e: ImageErrorEvent) => {
+                            if (currentUrl) {
+                              setCard3ImageStatus((previous) => ({ ...previous, [currentUrl]: 'error' }));
+                            }
+                            e.currentTarget.src = TARGET_IMAGE_FALLBACK;
+                          }}
                           alt={`Exact NFC Location ${card3Index + 1}`}
-                          className="w-full h-full object-cover"
+                          className={`w-full h-full object-cover transition-opacity duration-300 ${isCurrentImageLoading ? 'opacity-30' : 'opacity-100'}`}
                           effect="blur"
                         />
                       </button>
@@ -335,25 +436,45 @@ export const LockedContent: React.FC<LockedContentProps> = ({
                       </div>
                     )}
 
+                    {isCurrentImageLoading && (
+                      <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-white/80 px-6 text-center text-[var(--color-text-main)] backdrop-blur-sm">
+                        <div className="h-8 w-8 animate-spin rounded-full border-2 border-[var(--color-primary)] border-t-transparent" />
+                        <div>
+                          <p className="text-sm font-bold">Loading clue image...</p>
+                          <p className="mt-1 text-xs text-[var(--color-text-secondary)]">
+                            Hold on before switching pages so the route is shown correctly.
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
                     {imgs.length > 1 && (
                       <>
                         <button
-                          onClick={() => setCard3Index((s) => (s - 1 + imgs.length) % imgs.length)}
-                          className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/40 text-white p-2 rounded-full"
+                          onClick={() => goToImage(safeIndex - 1)}
+                          disabled={isCurrentImageLoading}
+                          className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-black/40 px-3 py-2 text-white transition-opacity disabled:cursor-wait disabled:opacity-40"
                           aria-label="Previous image"
                         >
                           ‹
                         </button>
                         <button
-                          onClick={() => setCard3Index((s) => (s + 1) % imgs.length)}
-                          className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/40 text-white p-2 rounded-full"
+                          onClick={() => goToImage(safeIndex + 1)}
+                          disabled={isCurrentImageLoading}
+                          className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-black/40 px-3 py-2 text-white transition-opacity disabled:cursor-wait disabled:opacity-40"
                           aria-label="Next image"
                         >
                           ›
                         </button>
                         <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-2">
                           {imgs.map((_, i) => (
-                            <button key={i} onClick={() => setCard3Index(i)} className={`w-2 h-2 rounded-full ${i === card3Index ? 'bg-white' : 'bg-white/40'}`} aria-label={`Go to image ${i+1}`} />
+                            <button
+                              key={i}
+                              onClick={() => goToImage(i)}
+                              disabled={isCurrentImageLoading}
+                              className={`h-2 w-2 rounded-full transition-opacity disabled:cursor-wait ${i === safeIndex ? 'bg-white' : 'bg-white/40'}`}
+                              aria-label={`Go to image ${i + 1}`}
+                            />
                           ))}
                         </div>
                       </>
